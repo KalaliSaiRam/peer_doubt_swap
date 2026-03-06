@@ -1,23 +1,37 @@
-* {
+/* ══════════════════════════════════════════════
+   doubtSolver2.css  —  Consistent light theme
+    Header/banner/comment sections updated.
+    Compiler section preserved at bottom.
+══════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Segoe UI", sans-serif;
 }
 
 body {
-    background: #f4f7fc;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f0f4ff 0%, #fafbff 50%, #f0fdf4 100%);
     min-height: 100vh;
 }
 
-/* ===== HEADER (SAME AS DASHBOARD) ===== */
+/* ── HEADER ─────────────────────────────────── */
 .header {
-    background: #0d5bd9;
+    background: linear-gradient(90deg, #1a56db 0%, #1e40af 100%);
     color: white;
-    padding: 15px 40px;
+    padding: 0 40px;
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    box-shadow: 0 2px 20px rgba(26, 86, 219, 0.35);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .header-left {
@@ -27,146 +41,350 @@ body {
 }
 
 .header-left img {
-    height: 40px;
-    width: 40px;
-    border-radius: 6px;
+    height: 38px;
+    width: 38px;
+    border-radius: 8px;
     background: white;
     padding: 4px;
+    object-fit: contain;
 }
 
 .header-left span {
-    font-size: 22px;
-    font-weight: bold;
+    font-size: 1.2rem;
+    font-weight: 700;
 }
 
 .points {
-    background: white;
-    color: #0d5bd9;
-    padding: 6px 12px;
-    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
     font-weight: 600;
+    font-size: 0.9rem;
 }
 
-/* ===== SUBJECT DISPLAY ===== */
+/* ── SUBJECT BANNER ─────────────────────────── */
 .subject-banner {
-    margin: 40px auto 20px;
+    margin: 36px auto 20px;
     width: 80%;
+    max-width: 760px;
     background: white;
-    padding: 25px;
-    border-radius: 12px;
+    padding: 22px 32px;
+    border-radius: 16px;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 24px rgba(26, 86, 219, 0.09);
+    border: 1px solid rgba(26, 86, 219, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.subject-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1a56db, #10b981, #1a56db);
+    background-size: 200%;
+    animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 0%
+    }
+
+    100% {
+        background-position: 200%
+    }
 }
 
 #display-here {
-    font-size: 26px;
-    color: #0d5bd9;
-    font-weight: 600;
+    font-size: 1.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1a56db, #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-/* ===== QUESTION BOX ===== */
+/* ── QUESTION BOX ───────────────────────────── */
 .question-section {
     width: 80%;
-    margin: 30px auto;
+    max-width: 760px;
+    margin: 24px auto;
     background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    padding: 28px 32px;
+    border-radius: 18px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.07);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .question-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #1f2937;
+    margin-bottom: 14px;
     text-align: center;
-    font-weight: bold;
-    font-size: 1.4rem;
-    color: #333;
-    margin-bottom: 20px;
 }
 
-.question-box { 
-    width: 100%;
-    margin: 20px auto; 
-    border: 3px solid #38a169; 
-    padding: 25px; 
-    background: #f0f9f4; 
-    font-size: 1.3rem; 
-    font-weight: 600; 
-    text-align: left; 
-    border-radius: 8px;
-    line-height: 1.6;
-}
-
-/* ===== COMMENT SECTION ===== */
-.comment-section { 
-    width: 80%; 
-    margin: 30px auto;
-    background: white;
-    padding: 30px;
+.question-box {
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border-left: 4px solid #059669;
+    border: 1px solid #d1fae5;
+    border-left: 4px solid #059669;
+    padding: 20px 22px;
+    margin-top: 6px;
+    font-size: 1.05rem;
+    font-weight: 600;
     border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    line-height: 1.7;
+    color: #1f2937;
+}
+
+.question-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 0.82rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.question-meta .meta-sep {
+    color: #d1d5db;
+    font-size: 0.7rem;
+}
+
+/* ── COMMENT / SOLUTION SECTION ─────────────── */
+.comment-section {
+    width: 80%;
+    max-width: 760px;
+    margin: 24px auto;
+    background: white;
+    padding: 28px 32px;
+    border-radius: 18px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.07);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .comment-section h3 {
-    font-weight: bold;
-    font-size: 1.4rem;
-    color: #333;
-    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #1f2937;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #f3f4f6;
+    text-align: center;
 }
 
-.comment-input { 
-    width: 100%; 
-    height: 120px; 
-    margin-bottom: 15px; 
-    border: 2px solid #38a169; 
-    padding: 15px; 
-    border-radius: 8px;
-    font-size: 16px;
+.comment-input {
+    width: 100%;
+    height: 130px;
+    margin-bottom: 14px;
+    border: 2px solid #e5e7eb;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 0.95rem;
     font-family: inherit;
     resize: vertical;
-    transition: border-color 0.3s;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    background: #f9fafb;
+    color: #1f2937;
+    line-height: 1.6;
 }
 
 .comment-input:focus {
     outline: none;
-    border-color: #2f855a;
-    box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.1);
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+    background: white;
 }
 
 .post-button {
-    background-color: #38a169;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #059669, #10b981);
     color: white;
     border: none;
-    padding: 12px 30px;
     cursor: pointer;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    transition: background-color 0.3s;
+    font-weight: 700;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    letter-spacing: 0.3px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.28);
     margin-bottom: 20px;
 }
 
 .post-button:hover {
-    background-color: #2f855a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(5, 150, 105, 0.38);
 }
 
-.comment-list { 
-    list-style: none; 
-    padding: 0; 
+.post-button:active {
+    transform: translateY(0);
 }
 
-.comment-item { 
-    background: #f9f9f9; 
-    padding: 15px; 
-    margin-bottom: 10px; 
-    border-left: 5px solid #38a169; 
-    border-radius: 4px;
-    font-size: 1rem;
-    line-height: 1.5;
+.comment-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 4px;
+}
+
+.comment-item {
+    background: #f8faff;
+    border: 1px solid #e0e7ff;
+    border-left: 4px solid #1a56db;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    font-size: 0.93rem;
+    line-height: 1.6;
+    color: #374151;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.comment-item:hover {
+    transform: translateX(3px);
+    box-shadow: 0 4px 14px rgba(26, 86, 219, 0.1);
 }
 
 .empty-msg {
     text-align: center;
-    color: #888;
-    padding: 20px;
-    font-style: italic;
+    color: #9ca3af;
+    padding: 24px;
+    font-size: 0.9rem;
 }
 
+/* ══════════════════════════════════════════════
+   ONLINE COMPILER  —  preserved Catppuccin dark
+══════════════════════════════════════════════ */
+.compiler-section {
+    width: 80%;
+    max-width: 760px;
+    margin: 28px auto 50px;
+    background: #1e1e2e;
+    border-radius: 18px;
+    padding: 28px 32px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+    color: #cdd6f4;
+}
+
+.compiler-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #cba6f7;
+    letter-spacing: 0.3px;
+}
+
+.compiler-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.compiler-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #45475a;
+    background: #313244;
+    color: #cdd6f4;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.run-btn {
+    padding: 8px 20px;
+    border-radius: 8px;
+    border: none;
+    background: #a6e3a1;
+    color: #1e1e2e;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s, transform 0.15s;
+    font-family: inherit;
+}
+
+.run-btn:hover {
+    background: #94e2d5;
+    transform: translateY(-1px);
+}
+
+.run-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.clear-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #45475a;
+    background: transparent;
+    color: #f38ba8;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: inherit;
+}
+
+.clear-btn:hover {
+    background: rgba(243, 139, 168, 0.1);
+}
+
+.code-editor {
+    width: 100%;
+    min-height: 220px;
+    border-radius: 10px;
+    border: 1px solid #45475a;
+    background: #181825;
+    color: #cdd6f4;
+    padding: 16px;
+    font-family: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    resize: vertical;
+    tab-size: 4;
+    transition: border-color 0.2s;
+}
+
+.code-editor:focus {
+    outline: none;
+    border-color: #cba6f7;
+}
+
+.compiler-output-wrap {
+    margin-top: 14px;
+}
+
+.output-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6c7086;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.compiler-output {
+    background: #181825;
+    border: 1px solid #45475a;
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+    font-size: 0.88rem;
+    color: #a6e3a1;
+    min-height: 90px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.5;
+}

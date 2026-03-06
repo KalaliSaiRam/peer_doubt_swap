@@ -1,0 +1,293 @@
+/*
+ * theme.css — Global dark-mode overrides for Peer Doubt Swap
+ * Applied by setting data-theme="dark" on <html> via navbar.js
+ * All transitions are smooth (0.3s).
+ */
+
+* {
+    transition: background-color 0.3s ease, color 0.3s ease,
+        border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* ══ BODY ══════════════════════════════════════ */
+[data-theme="dark"] body {
+    background: linear-gradient(135deg, #0b1120 0%, #111827 50%, #0b1120 100%) !important;
+    color: #e2e8f0 !important;
+}
+
+/* ══ HEADER ═════════════════════════════════════ */
+[data-theme="dark"] .header,
+[data-theme="dark"] .app-header {
+    background: linear-gradient(90deg, #1e3a8a 0%, #1e3a8a 100%) !important;
+}
+
+/* ══ CARDS / PANELS ══════════════════════════════ */
+[data-theme="dark"] .login-card,
+[data-theme="dark"] .main-content,
+[data-theme="dark"] .posted-doubts-section,
+[data-theme="dark"] .doubts-section,
+[data-theme="dark"] .question-section,
+[data-theme="dark"] .comment-section,
+[data-theme="dark"] .compiler-section,
+[data-theme="dark"] .profile-hero,
+[data-theme="dark"] .details-card,
+[data-theme="dark"] .doubts-col,
+[data-theme="dark"] .logout-section,
+[data-theme="dark"] .forget-card,
+[data-theme="dark"] .signup-card,
+[data-theme="dark"] .signup-container,
+[data-theme="dark"] .form-card,
+[data-theme="dark"] .card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Inner sub-cards */
+[data-theme="dark"] .detail-item {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+/* Profile page specifics */
+[data-theme="dark"] .app-header {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(12px);
+}
+
+[data-theme="dark"] .profile-hero {
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.12), rgba(234, 88, 12, 0.06)) !important;
+    border-color: rgba(249, 115, 22, 0.25) !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .hero-info h1 {
+    color: #fff !important;
+}
+
+[data-theme="dark"] .details-card,
+[data-theme="dark"] .doubts-col {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .level-progress-bar {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .diff-btn {
+    background: transparent !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .doubt-item-question {
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .section-heading {
+    color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .section-heading.asked {
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .section-heading.solved {
+    color: #4ade80 !important;
+}
+
+/* ══ TEXT ════════════════════════════════════════ */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] p,
+[data-theme="dark"] span,
+[data-theme="dark"] label,
+[data-theme="dark"] li,
+[data-theme="dark"] .doubts-title,
+[data-theme="dark"] .posted-doubts-title,
+[data-theme="dark"] .detail-label,
+[data-theme="dark"] .profile-handle,
+[data-theme="dark"] .profile-meta {
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .detail-value {
+    color: #94a3b8 !important;
+}
+
+/* Gradient text fallback — remove gradient in dark mode */
+[data-theme="dark"] #subjectTitle,
+[data-theme="dark"] #display-here,
+[data-theme="dark"] #display-selection,
+[data-theme="dark"] .app-title {
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: #93c5fd !important;
+    background-clip: unset !important;
+    color: #93c5fd !important;
+}
+
+/* ══ INPUTS, TEXTAREAS, SELECTS ══════════════════ */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select,
+[data-theme="dark"] .code-editor {
+    background: #0f172a !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: #64748b !important;
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+    border-color: #60a5fa !important;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15) !important;
+    background: #1e293b !important;
+}
+
+/* ══ DOUBT BOXES / CARDS ══════════════════════════ */
+[data-theme="dark"] .doubt-box,
+[data-theme="dark"] .doubt-card {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    border-left-color: #3b82f6 !important;
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .doubt-box:hover,
+[data-theme="dark"] .doubt-card:hover {
+    background: #1e293b !important;
+    border-left-color: #10b981 !important;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* ══ COMPILER OUTPUT ══════════════════════════════ */
+[data-theme="dark"] .compiler-output,
+[data-theme="dark"] .compiler-output-wrap {
+    background: #0f172a !important;
+    color: #4ade80 !important;
+    border-color: #334155 !important;
+}
+
+[data-theme="dark"] .output-label {
+    color: #94a3b8 !important;
+}
+
+/* ══ QUESTION BOX ═════════════════════════════════ */
+[data-theme="dark"] .question-box {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+/* ══ DIFFICULTY FILTER ROW ═══════════════════════ */
+[data-theme="dark"] .filter-item label {
+    color: #94a3b8 !important;
+}
+
+/* ══ COMMENT LIST ═════════════════════════════════ */
+[data-theme="dark"] .comment-list li,
+[data-theme="dark"] .comment-item {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+/* ══ EMPTY STATE ══════════════════════════════════ */
+[data-theme="dark"] .empty-state {
+    color: #64748b !important;
+}
+
+/* ══ LEVEL PROGRESS ═══════════════════════════════ */
+[data-theme="dark"] .level-progress-bar {
+    background: #1e293b !important;
+}
+
+/* ══ FILTER BUTTONS (profile) ════════════════════ */
+[data-theme="dark"] .diff-btn {
+    background: #1e293b !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+[data-theme="dark"] .diff-btn.active {
+    background: #1d4ed8 !important;
+    color: white !important;
+}
+
+/* ══ SUN / MOON TOGGLE BUTTON ═════════════════════ */
+.theme-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 52px;
+    height: 28px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease, border-color 0.3s ease !important;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.theme-toggle-btn .t-track {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 44px;
+    gap: 2px;
+}
+
+.theme-toggle-btn .t-icon {
+    font-size: 14px;
+    line-height: 1;
+    transition: opacity 0.3s ease, transform 0.4s ease !important;
+    display: inline-block;
+}
+
+/* Light mode: sun bright, moon dim */
+.theme-toggle-btn .sun-icon {
+    opacity: 1;
+    transform: scale(1.1) rotate(0deg);
+}
+
+.theme-toggle-btn .moon-icon {
+    opacity: 0.35;
+    transform: scale(0.85);
+}
+
+/* Dark mode: moon bright, sun dim */
+[data-theme="dark"] .theme-toggle-btn .sun-icon {
+    opacity: 0.35;
+    transform: scale(0.85);
+}
+
+[data-theme="dark"] .theme-toggle-btn .moon-icon {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+[data-theme="dark"] .theme-toggle-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
+}

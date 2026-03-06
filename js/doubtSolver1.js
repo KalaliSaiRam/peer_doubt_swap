@@ -1,63 +1,59 @@
-let currentStars = 0;
-
-function addPoint() {
-  currentStars += 10;
-  document.getElementById("star-count").innerText = currentStars;
-}
-
 window.onload = function () {
-  const cx = localStorage.getItem("selectedItem") || localStorage.getItem("selectedSubject");
-  const displayElement = document.getElementById("display-selection");
-  displayElement.innerText = cx ? "Subject: " + cx : "No Subject Selected";
+  const stars = sessionStorage.getItem('pds_stars') || '0';
+  const starEl = document.getElementById('star-count');
+  if (starEl) starEl.innerText = stars;
 
-  const listContainer = document.getElementById("solver-list");
-  const filterSelect = document.getElementById("difficulty-filter");
+  const subjectFilter = document.getElementById('subject-filter');
+  const filterSelect = document.getElementById('difficulty-filter');
 
-  function normalizeDoubt(item) {
-    if (typeof item === "string") {
-      return { question: item, difficulty: "unknown" };
-    }
-    if (item && typeof item === "object") {
-      return {
-        question: item.question || item.text || "",
-        difficulty: (item.difficulty || "unknown").toString().toLowerCase(),
-      };
-    }
-    return { question: "", difficulty: "unknown" };
-  }
-
-  function renderDoubts() {
-    const selected = (filterSelect.value || "all").toLowerCase();
-    const doubtsRaw = JSON.parse(localStorage.getItem("allDoubts")) || [];
-    const doubts = doubtsRaw.map(normalizeDoubt).filter((d) => d.question && d.question.trim().length > 0);
-
-    listContainer.innerHTML = "";
-
-    const filtered = selected === "all" ? doubts : doubts.filter((d) => d.difficulty === selected);
-
-    if (filtered.length === 0) {
-      const emptyState = document.createElement("div");
-      emptyState.className = "empty-state";
-      emptyState.innerText =
-        selected === "all"
-          ? "No doubts available yet. Check back later!"
-          : "No doubts found for this difficulty.";
-      listContainer.appendChild(emptyState);
-      return;
-    }
-
-    filtered.forEach((d) => {
-      const box = document.createElement("div");
-      box.className = "doubt-box";
-      box.innerText = d.question;
-      box.onclick = function () {
-        localStorage.setItem("currentQuestion", d.question);
-        window.location.href = "doubtSolver2.html";
-      };
-      listContainer.appendChild(box);
-    });
-  }
-
-  filterSelect.addEventListener("change", renderDoubts);
+  subjectFilter.addEventListener('change', renderDoubts);
+  filterSelect.addEventListener('change', renderDoubts);
   renderDoubts();
 };
+
+function renderDoubts() {
+  const listContainer = document.getElementById('solver-list');
+  const subjectFilter = document.getElementById('subject-filter');
+  const difficultyFilter = document.getElementById('difficulty-filter');
+  const selectedSubject = (subjectFilter.value || 'all').toLowerCase();
+  const selectedDiff = (difficultyFilter.value || 'all').toLowerCase();
+
+  const allDoubts = JSON.parse(sessionStorage.getItem('pds_localDoubts') || '[]');
+
+  let doubts = allDoubts;
+  if (selectedSubject !== 'all') {
+    doubts = doubts.filter(d => (d.subjectName || '').toLowerCase() === selectedSubject);
+  }
+  if (selectedDiff !== 'all') {
+    doubts = doubts.filter(d => d.difficulty === selectedDiff);
+  }
+
+  listContainer.innerHTML = '';
+
+  if (!doubts.length) {
+    listContainer.innerHTML = '<div class="empty-state">No doubts available for the selected filters. Be the first to ask!</div>';
+    return;
+  }
+
+  doubts.forEach(d => {
+    const box = document.createElement('div');
+    box.className = 'doubt-box';
+
+    const badge = { easy: '🟢 Easy', medium: '🟡 Medium', hard: '🔴 Hard' }[d.difficulty] || d.difficulty;
+    box.innerHTML = `
+      <div style="font-weight:600">${d.question}</div>
+      <div style="font-size:0.8rem;margin-top:4px;display:flex;gap:10px;opacity:0.75">
+        <span>${badge}</span>
+        <span>📚 ${d.subjectName}</span>
+        <span>💬 ${(d.answers || []).length} answer(s)</span>
+      </div>`;
+    box.onclick = function () {
+      sessionStorage.setItem('pds_currentQuestion', d.question);
+      sessionStorage.setItem('pds_currentDoubtId', d.id);
+      sessionStorage.setItem('pds_subjectName', d.subjectName || '');
+      sessionStorage.setItem('pds_difficulty', d.difficulty || '');
+      window.location.href = 'doubtSolver2.html';
+    };
+    listContainer.appendChild(box);
+  });
+}

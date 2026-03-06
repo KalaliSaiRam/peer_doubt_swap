@@ -1,84 +1,49 @@
-let currentStars = 0;
-
 window.onload = function () {
-  const subject = localStorage.getItem("selectedSubject");
-  const displayElement = document.getElementById("display-here");
-  if (subject) {
-    displayElement.innerText = "Subject: " + subject;
-  } else {
-    displayElement.innerText = "No Subject Selected";
-  }
+  const stars = sessionStorage.getItem('pds_stars') || '0';
+  const starEl = document.getElementById('star-count');
+  if (starEl) starEl.innerText = stars;
 };
 
-function validateQuestion(question) {
-  const trimmedQuestion = question.trim();
+const SUBJECTS = ['C', 'C++', 'Python', 'Java'];
 
-  if (trimmedQuestion === "") {
-    return { valid: false, message: "Please type a question before posting." };
-  }
-
-  if (trimmedQuestion.length < 10) {
-    return { valid: false, message: "Question must be at least 10 characters long." };
-  }
-
-  if (trimmedQuestion.length > 1000) {
-    return { valid: false, message: "Question is too long. Please keep it under 1000 characters." };
-  }
-
-  const hasLetters = /[a-zA-Z]/.test(trimmedQuestion);
-  if (!hasLetters) {
-    return { valid: false, message: "Question must contain at least some text." };
-  }
-
-  const letterCount = (trimmedQuestion.match(/[a-zA-Z]/g) || []).length;
-  const totalChars = trimmedQuestion.length;
-  if (letterCount < totalChars * 0.3) {
-    return { valid: false, message: "Question must contain meaningful text, not just numbers or symbols." };
-  }
-
-  return { valid: true, message: "" };
-}
+let localDoubts = JSON.parse(sessionStorage.getItem('pds_localDoubts') || '[]');
 
 function postDoubt() {
-  const questionInput = document.getElementById("user-input");
-  const questionValue = questionInput.value;
-  const difficultySelect = document.getElementById("difficulty-select");
-  const difficultyValue = difficultySelect.value;
-  const listContainer = document.getElementById("posted-doubts-list");
+  const subjectSelect = document.getElementById('subject-select');
+  const questionInput = document.getElementById('user-input');
+  const difficultySelect = document.getElementById('difficulty-select');
 
-  const validation = validateQuestion(questionValue);
-  if (!validation.valid) {
-    alert(validation.message);
-    return;
-  }
+  const subject = subjectSelect.value;
+  const question = questionInput.value;
+  const difficulty = difficultySelect.value;
 
-  if (difficultyValue === "") {
-    alert("Please select a difficulty level.");
-    return;
-  }
+  // Client-side validation
+  const trimmed = question.trim();
+  if (subject === '') { alert('Please select a subject.'); return; }
+  if (trimmed === '') { alert('Please type a question before posting.'); return; }
+  if (trimmed.length < 10) { alert('Question must be at least 10 characters.'); return; }
+  if (trimmed.length > 1000) { alert('Question is too long (max 1000 chars).'); return; }
+  if (!/[a-zA-Z]/.test(trimmed)) { alert('Question must contain text.'); return; }
+  if (difficulty === '') { alert('Please select a difficulty level.'); return; }
 
-  localStorage.setItem("selectedDifficulty", difficultyValue);
-
-  let doubts = JSON.parse(localStorage.getItem("allDoubts")) || [];
-  doubts.push({
-    question: questionValue,
-    difficulty: difficultyValue,
-    createdAt: new Date().toISOString(),
-  });
-  localStorage.setItem("allDoubts", JSON.stringify(doubts));
-
-  const newDoubt = document.createElement("div");
-  newDoubt.className = "doubt-box";
-  newDoubt.innerText = questionValue;
-
-  newDoubt.onclick = function () {
-    localStorage.setItem("activeDoubt", questionValue);
-    window.location.href = "doubtAsker2.html";
+  const doubtId = Date.now();
+  const newDoubt = {
+    id: doubtId,
+    question: trimmed,
+    difficulty: difficulty,
+    subjectName: subject,
+    answers: []
   };
 
-  listContainer.prepend(newDoubt);
-  currentStars += 10;
-  document.getElementById("star-count").innerText = currentStars;
-  questionInput.value = "";
-  difficultySelect.value = "";
+  localDoubts.push(newDoubt);
+  sessionStorage.setItem('pds_localDoubts', JSON.stringify(localDoubts));
+
+  // Show inline success message
+  const successMsg = document.getElementById('post-success');
+  successMsg.style.display = 'block';
+  setTimeout(() => { successMsg.style.display = 'none'; }, 3000);
+
+  questionInput.value = '';
+  difficultySelect.value = '';
+  subjectSelect.value = '';
 }

@@ -9,6 +9,8 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/signin.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <script>(function () { var t = localStorage.getItem('pds_theme') || 'light'; document.documentElement.setAttribute('data-theme', t); })();</script>
 
 </head>
 
@@ -117,31 +119,62 @@
 
               <div class="mb-3">
                 <label>College Name</label>
-                <input type="text" class="form-control" id="collegeName" onkeydown="return allowCollegeName(event)"
+                <div class="college-search-wrap" style="position:relative;">
+                  <input type="text" class="form-control" id="collegeSearch" autocomplete="off"
+                    placeholder="Search or type your college..." oninput="filterColleges()" onfocus="showCollegeList()">
+                  <input type="hidden" id="collegeName">
+                  <div id="collegeDropdown" class="college-dropdown"
+                    style="display:none; position:absolute; top:100%; left:0; right:0; max-height:220px; overflow-y:auto; background:#fff; border:1px solid #dee2e6; border-top:none; border-radius:0 0 8px 8px; z-index:50; box-shadow:0 8px 24px rgba(0,0,0,0.12);">
+                  </div>
+                </div>
+                <input type="text" class="form-control mt-2" id="collegeOther" placeholder="Type your college name..."
+                  style="display:none;" onkeydown="return allowCollegeName(event)"
                   onpaste="return preventInvalidCollegePaste(event)">
               </div>
 
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label>Passout Year</label>
-                  <input type="text" class="form-control" id="passoutYear" maxlength="4"
-                    onkeydown="return allowOnlyNumbers(event)" onpaste="return preventYearPaste(event)">
+                  <select class="form-select" id="passoutYear" required>
+                    <option value="">-- Select Year --</option>
+                    <option>2030</option>
+                    <option>2029</option>
+                    <option>2028</option>
+                    <option>2027</option>
+                    <option>2026</option>
+                    <option>2025</option>
+                    <option>2024</option>
+                    <option>2023</option>
+                    <option>2022</option>
+                    <option>2021</option>
+                    <option>2020</option>
+                    <option>2019</option>
+                    <option>2018</option>
+                    <option>2017</option>
+                  </select>
                 </div>
 
                 <div class="col-md-6 mb-3">
                   <label>Branch</label>
                   <select class="form-select" id="branch" required>
                     <option value="">-- Select Branch --</option>
-                    <option>Computer Science</option>
-                    <option>Computer Science(Artificial Intelligence And Machine Learning)</option>
-                    <option>Computer Science(Data Science)</option>
-                    <option>Electronics and Communication</option>
-                    <option>Electronics and Electrical</option>
-                    <option>Mechanical</option>
-                    <option>Civil</option>
-                    <option>Chemical</option>
-                    <option>Pharmaceutical</option>
-                    <option>Biomedical</option>
+                    <!-- Core Branches -->
+                    <option>Computer Science and Engineering (CSE)</option>
+                    <option>Computer Science (Artificial Intelligence and Machine Learning)</option>
+                    <option>Computer Science (Data Science)</option>
+                    <option>Computer Science (Cyber Security)</option>
+                    <option>Information Technology (IT)</option>
+                    <option>Electronics and Communication Engineering (ECE)</option>
+                    <option>Electrical Engineering (EE)</option>
+                    <option>Electrical and Electronics Engineering (EEE)</option>
+                    <option>Mechanical Engineering (ME)</option>
+                    <option>Civil Engineering (CE)</option>
+                    <option>Chemical Engineering</option>
+                    <!-- Specialized Branches -->
+                    <option>Aerospace Engineering</option>
+                    <option>Pharmaceutical Engineering</option>
+                    <option>Engineering Physics</option>
+                    <option>IT (Business Informatics)</option>
                   </select>
                 </div>
               </div>
@@ -206,6 +239,11 @@
       </div>
     </div>
   </div>
+  <!-- Floating theme toggle -->
+  <button
+    onclick="(function(){var h=document.documentElement,d=h.getAttribute('data-theme')==='dark',n=d?'light':'dark';h.setAttribute('data-theme',n);localStorage.setItem('pds_theme',n);})()"
+    title="Toggle light/dark"
+    style="position:fixed;top:14px;right:16px;z-index:999;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:1.1rem;backdrop-filter:blur(6px);">☀️&nbsp;🌙</button>
   <script src="../js/signin.js"></script>
 </body>
 

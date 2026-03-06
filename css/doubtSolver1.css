@@ -1,23 +1,35 @@
-* {
+/* ══════════════════════════════════════════════
+   doubtSolver1.css  —  Consistent light theme
+══════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Segoe UI", sans-serif;
 }
 
 body {
-    background: #f4f7fc;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f0f4ff 0%, #fafbff 50%, #f0fdf4 100%);
     min-height: 100vh;
 }
 
-/* ===== HEADER (SAME AS DASHBOARD) ===== */
+/* ── HEADER ─────────────────────────────────── */
 .header {
-    background: #0d5bd9;
+    background: linear-gradient(90deg, #1a56db 0%, #1e40af 100%);
     color: white;
-    padding: 15px 40px;
+    padding: 0 40px;
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    box-shadow: 0 2px 20px rgba(26, 86, 219, 0.35);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .header-left {
@@ -27,88 +39,190 @@ body {
 }
 
 .header-left img {
-    height: 40px;
-    width: 40px;
-    border-radius: 6px;
+    height: 38px;
+    width: 38px;
+    border-radius: 8px;
     background: white;
     padding: 4px;
+    object-fit: contain;
 }
 
 .header-left span {
-    font-size: 22px;
-    font-weight: bold;
+    font-size: 1.2rem;
+    font-weight: 700;
 }
 
 .points {
-    background: white;
-    color: #0d5bd9;
-    padding: 6px 12px;
-    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
     font-weight: 600;
+    font-size: 0.9rem;
 }
 
-/* ===== SUBJECT DISPLAY ===== */
-.subject-banner {
-    margin: 40px auto 20px;
-    width: 80%;
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
-
-#display-selection {
-    font-size: 26px;
-    color: #0d5bd9;
-    font-weight: 600;
-}
-
-/* ===== DOUBTS LIST ===== */
-.doubts-section {
-    width: 80%;
-    margin: 30px auto;
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
-
-.doubts-title {
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.4rem;
-    color: #333;
+/* ── FILTER ROW ───────────────────────────── */
+.filter-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: flex-end;
     margin-bottom: 20px;
 }
 
-#solver-list {
-    margin-top: 20px;
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 140px;
 }
 
+.filter-item label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+/* ── DOUBTS LIST ────────────────────────────── */
+.doubts-section {
+    width: 80%;
+    max-width: 900px;
+    margin: 24px auto 50px;
+    background: white;
+    padding: 28px 32px;
+    border-radius: 18px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.07);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.doubts-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #1f2937;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #f3f4f6;
+    text-align: center;
+}
+
+/* Difficulty filter row */
+.doubts-section>div[style] {
+    gap: 8px !important;
+    margin-bottom: 16px !important;
+}
+
+.doubts-section select {
+    padding: 9px 14px !important;
+    border-radius: 10px !important;
+    border: 2px solid #e5e7eb !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.88rem !important;
+    background: #f9fafb !important;
+    color: #374151 !important;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.doubts-section select:focus {
+    outline: none !important;
+    border-color: #1a56db !important;
+    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1) !important;
+}
+
+/* Doubt cards */
+.doubt-card {
+    background: #f8faff;
+    border: 1px solid #e0e7ff;
+    border-left: 4px solid #1a56db;
+    padding: 16px 20px;
+    margin: 10px 0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, border-left-color 0.2s, background 0.2s;
+}
+
+.doubt-card:hover {
+    transform: translateX(4px);
+    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.13);
+    border-left-color: #059669;
+    background: #f0fdf4;
+}
+
+.doubt-card h4 {
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.doubt-card .doubt-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    color: #6b7280;
+    margin-top: 6px;
+}
+
+/* Difficulty badge */
+.badge-easy {
+    background: #d1fae5;
+    color: #065f46;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.72rem;
+}
+
+.badge-medium {
+    background: #fef3c7;
+    color: #92400e;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.72rem;
+}
+
+.badge-hard {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.72rem;
+}
+
+/* Legacy .doubt-box support */
 .doubt-box {
-    background-color: #eeeeee;
-    border-left: 5px solid #38a169;
-    padding: 15px;
+    background: #f8faff;
+    border: 1px solid #e0e7ff;
+    border-left: 4px solid #1a56db;
+    padding: 14px 18px;
     margin: 10px 0;
     width: 100%;
     text-align: left;
     font-family: inherit;
-    font-size: 1.1rem;
-    border-radius: 4px;
+    font-size: 0.97rem;
+    border-radius: 10px;
     cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, border-left-color 0.2s;
+    color: #1f2937;
+    line-height: 1.5;
 }
 
 .doubt-box:hover {
-    background-color: #e0e0e0;
-    transform: scale(1.01);
+    transform: translateX(4px);
+    box-shadow: 0 4px 16px rgba(26, 86, 219, 0.12);
+    border-left-color: #059669;
+    background: #f0fdf4;
 }
 
 .empty-state {
     text-align: center;
     padding: 40px;
-    color: #888;
-    font-size: 1.1rem;
+    color: #9ca3af;
+    font-size: 0.95rem;
 }
-

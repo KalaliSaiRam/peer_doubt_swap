@@ -1,23 +1,44 @@
-* {
+/* ══════════════════════════════════════════════
+   dashboard.css  —  Premium light theme
+   Buttons fill the window height after header
+══════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: #f4f7fc;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f0f4ff 0%, #fafbff 50%, #f5f0ff 100%);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ===== HEADER (SAME AS SUBJECT PAGE) ===== */
+/* ── HEADER ─────────────────────────────────── */
 .header {
-  background: #0d5bd9;
+  background: linear-gradient(90deg, #1a56db 0%, #1e40af 100%);
   color: white;
-  padding: 15px 40px;
+  padding: 0 40px;
+  height: 64px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 2px 20px rgba(26, 86, 219, 0.35);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .header-left {
@@ -27,77 +48,135 @@ body {
 }
 
 .header-left img {
-  height: 40px;
-  width: 40px;
-  border-radius: 6px;
+  height: 38px;
+  width: 38px;
+  border-radius: 8px;
   background: white;
   padding: 4px;
+  object-fit: contain;
 }
 
 .header-left span {
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
 }
 
 .points {
-  background: white;
-  color: #0d5bd9;
-  padding: 6px 12px;
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
   font-weight: 600;
+  font-size: 0.9rem;
+  backdrop-filter: blur(6px);
 }
 
-/* ===== SUBJECT DISPLAY ===== */
-.subject-banner {
-  margin: 40px auto 20px;
-  width: 80%;
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
-
-#subjectTitle {
-  font-size: 26px;
-  color: #0d5bd9;
-  font-weight: 600;
-}
-
-/* ===== ACTION BUTTONS ===== */
+/* ── ROLE CARDS — centred cards, background visible ─ */
 .dashboard-actions {
-  margin-top: 50px;
+  flex: 1;
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 40px;
+  padding: 48px 24px;
+  flex-wrap: wrap;
 }
 
 .action-btn {
-  width: 220px;
-  padding: 18px;
-  font-size: 16px;
+  width: 300px;
+  height: 340px;
+  padding: 0;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.action-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0);
+  transition: background 0.2s;
+}
+
+.action-btn:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+.action-btn:hover::after {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.action-btn:active {
+  filter: brightness(0.96);
+}
+
+.action-btn .btn-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 32px 24px;
+}
+
+.action-btn .btn-icon {
+  font-size: 3.4rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.18));
+  transition: transform 0.3s ease;
+}
+
+.action-btn:hover .btn-icon {
+  transform: scale(1.12) translateY(-4px);
+}
+
+.action-btn .btn-label {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 1.5px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.action-btn .btn-sublabel {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.88);
+  text-align: center;
+  max-width: 220px;
+}
+
+/* No divider — cards have their own border-radius */
+.action-btn+.action-btn {
+  border-left: none;
 }
 
 .asker {
-  background: #4caf50;
-  color: white;
-}
-
-.asker:hover {
-  background: #3e8e41;
+  background: linear-gradient(140deg, #047857 0%, #059669 40%, #10b981 100%);
+  box-shadow: 0 12px 40px rgba(5, 150, 105, 0.45);
 }
 
 .solver {
-  background: #ff9800;
-  color: white;
+  background: linear-gradient(140deg, #b45309 0%, #d97706 40%, #f59e0b 100%);
+  box-shadow: 0 12px 40px rgba(217, 119, 6, 0.45);
+}
+
+.asker:hover {
+  box-shadow: 0 20px 52px rgba(5, 150, 105, 0.55);
 }
 
 .solver:hover {
-  background: #e68900;
+  box-shadow: 0 20px 52px rgba(217, 119, 6, 0.55);
 }
-

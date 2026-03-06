@@ -1,7 +1,9 @@
 /* Global Styles */
 :root {
-    --primary-color: #0056b3;      /* Blue button */
-    --secondary-color: #ff8c00;    /* Orange outline button */
+    --primary-color: #0056b3;
+    /* Blue button */
+    --secondary-color: #ff8c00;
+    /* Orange outline button */
     --background-color: #f4f7f6;
     --card-bg: #ffffff;
     --text-color: #333333;
@@ -176,6 +178,35 @@ h1 {
 .btn-primary:hover {
     background: #004494;
     box-shadow: 0 4px 10px rgba(0, 86, 179, 0.3);
+}
+
+/* Password wrapper with eye toggle */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 42px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: color var(--transition-speed);
+}
+
+.password-toggle:hover {
+    color: var(--primary-color);
 }
 
 /* Mobile */

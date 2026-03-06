@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peer Doubt Swap - Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/profile.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-left">
+            <a href="dashboard.html" class="app-title">Peer Doubt Swap</a>
+        </div>
+        <div class="header-right">
+            <img src="../images/logo.png" alt="Logo" class="app-logo">
+            <div id="user-nav"></div>
+        </div>
+    </header>
+
+    <main class="profile-main">
+
+        <!-- HERO CARD -->
+        <section class="profile-hero">
+            <div class="avatar-large" id="profile-avatar">?</div>
+            <div class="hero-info">
+                <h1 id="profile-fullname">Loading...</h1>
+                <p id="profile-username" class="profile-handle">@username</p>
+                <p id="profile-email" class="profile-meta">email@example.com</p>
+                <div class="hero-badges">
+                    <span class="badge-stars" id="hero-stars">⭐ 0 Stars</span>
+                    <span class="badge-level" id="hero-level">🏆 Bronze</span>
+                </div>
+                <!-- Level progress bar -->
+                <div class="level-progress-wrap">
+                    <div class="level-progress-bar">
+                        <div class="level-progress-fill" id="level-fill"></div>
+                    </div>
+                    <div class="level-labels">
+                        <span id="level-current-label"></span>
+                        <span id="level-next-label"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DETAILS CARD -->
+        <section class="details-card">
+            <h2 class="section-heading">Personal Details</h2>
+            <div class="details-grid" id="details-grid">
+                <div class="detail-item"><span class="detail-label">Date of Birth</span><span class="detail-value"
+                        id="d-dob">-</span></div>
+                <div class="detail-item"><span class="detail-label">Gender</span><span class="detail-value"
+                        id="d-gender">-</span></div>
+                <div class="detail-item"><span class="detail-label">Student</span><span class="detail-value"
+                        id="d-student">-</span></div>
+                <div class="detail-item"><span class="detail-label">College</span><span class="detail-value"
+                        id="d-college">-</span></div>
+                <div class="detail-item"><span class="detail-label">Passout Year</span><span class="detail-value"
+                        id="d-year">-</span></div>
+                <div class="detail-item"><span class="detail-label">Branch</span><span class="detail-value"
+                        id="d-branch">-</span></div>
+                <div class="detail-item"><span class="detail-label">Member Since</span><span class="detail-value"
+                        id="d-joined">-</span></div>
+            </div>
+        </section>
+
+        <!-- DOUBTS TWO-COLUMN -->
+        <section class="doubts-section">
+
+            <!-- DOUBTS ASKED -->
+            <div class="doubts-col">
+                <h2 class="section-heading asked">📋 Doubts Asked</h2>
+                <div class="filter-row">
+                    <button class="diff-btn active" data-col="asked" data-diff="all">All</button>
+                    <button class="diff-btn easy" data-col="asked" data-diff="easy">🟢 Easy</button>
+                    <button class="diff-btn medium" data-col="asked" data-diff="medium">🟡 Medium</button>
+                    <button class="diff-btn hard" data-col="asked" data-diff="hard">🔴 Hard</button>
+                </div>
+                <div class="doubts-list" id="asked-list">
+                    <div class="empty-state">Loading...</div>
+                </div>
+            </div>
+
+            <!-- DOUBTS SOLVED -->
+            <div class="doubts-col">
+                <h2 class="section-heading solved">✅ Doubts Solved</h2>
+                <div class="filter-row">
+                    <button class="diff-btn active" data-col="solved" data-diff="all">All</button>
+                    <button class="diff-btn easy" data-col="solved" data-diff="easy">🟢 Easy</button>
+                    <button class="diff-btn medium" data-col="solved" data-diff="medium">🟡 Medium</button>
+                    <button class="diff-btn hard" data-col="solved" data-diff="hard">🔴 Hard</button>
+                </div>
+                <div class="doubts-list" id="solved-list">
+                    <div class="empty-state">Loading...</div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- LOGOUT -->
+        <section class="logout-section">
+            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+        </section>
+
+    </main>
+
+    <script src="../js/navbar.js"></script>
+    <script src="../js/profile.js"></script>
+</body>
+
+</html>

@@ -1,41 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>DOUBT SOLVER | Peer Doubt Swap</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/doubtSolver2.css">
-    </head>
-    <body>
-        <!-- ===== HEADER ===== -->
-        <div class="header">
-            <div class="header-left">
-                <img src="../images/logo.png" alt="Logo">
-                <span>Peer Doubt Swap</span>
-            </div>
-            <div class="points">
-                ⭐ <span id="star-count">0</span>
-            </div>
-        </div>
 
-        <!-- ===== SUBJECT ===== -->
-        <div class="subject-banner">
-            <h2 id="display-here">No Subject Selected</h2>
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <title>DOUBT SOLVER | Peer Doubt Swap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/doubtSolver2.css">
+</head>
 
-        <!-- ===== QUESTION ===== -->
-        <div class="question-section">
-            <p class="question-title">DOUBT DETAILS</p>
-            <div class="question-box" id="display-question">Loading Question...</div>
+<body>
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <div class="header-left">
+            <img src="../images/logo.png" alt="Logo">
+            <span>Peer Doubt Swap</span>
         </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div class="points">⭐ <span id="star-count">0</span></div>
+            <div id="user-nav"></div>
+        </div>
+    </div>
 
-        <!-- ===== COMMENT SECTION ===== -->
-        <div class="comment-section">
-            <h3>SOLUTIONS / COMMENTS</h3>
-            <textarea id="new-comment" class="comment-input" placeholder="Write a solution or comment..."></textarea>
-            <button onclick="addComment()" class="post-button">Post Comment</button>
-            <ul id="comment-list" class="comment-list"></ul>
+    <!-- ===== QUESTION ===== -->
+    <div class="question-section">
+        <p class="question-title">DOUBT DETAILS</p>
+        <div class="question-box" id="display-question">Loading Question...</div>
+        <div class="question-meta">
+            <span id="meta-subject"></span>
+            <span class="meta-sep">·</span>
+            <span id="meta-difficulty"></span>
         </div>
-        <script src="../js/doubtSolver2.js"></script>
-    </body>
+    </div>
+
+    <!-- ===== COMMENT SECTION ===== -->
+    <div class="comment-section">
+        <h3>SOLUTIONS / COMMENTS</h3>
+        <textarea id="new-comment" class="comment-input" placeholder="Write a solution or comment..."></textarea>
+        <button onclick="addComment()" class="post-button">Post Comment</button>
+        <ul id="comment-list" class="comment-list"></ul>
+    </div>
+
+    <!-- ===== ONLINE COMPILER ===== -->
+    <div class="compiler-section">
+        <h3 class="compiler-title">💻 Online Code Compiler</h3>
+        <div class="compiler-toolbar">
+            <select id="lang-select" class="compiler-select">
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="c">C</option>
+                <option value="c++">C++</option>
+                <option value="java">Java</option>
+                <option value="sql">SQL</option>
+            </select>
+            <button onclick="runCode()" class="run-btn">▶ Run Code</button>
+            <button onclick="clearCompiler()" class="clear-btn">🗑 Clear</button>
+        </div>
+        <textarea id="code-editor" class="code-editor" placeholder="Write your code here..."
+            spellcheck="false"></textarea>
+        <div class="compiler-output-wrap">
+            <div class="output-label">Output</div>
+            <pre id="compiler-output" class="compiler-output">Run your code to see output here...</pre>
+        </div>
+    </div>
+
+    <script src="../js/navbar.js"></script>
+    <script src="../js/doubtSolver2.js"></script>
+    <script src="../js/compiler.js"></script>
+</body>
+
 </html>

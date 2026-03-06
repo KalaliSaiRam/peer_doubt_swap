@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Dashboard | Peer Doubt Swap</title>
@@ -11,30 +12,37 @@
   <!-- ===== HEADER ===== -->
   <div class="header">
     <div class="header-left">
-      <!-- SAME LOGO AS SUBJECT PAGE -->
       <img src="../images/logo.png" alt="Logo">
       <span>Peer Doubt Swap</span>
     </div>
 
-    <div class="points">
-      ⭐ <span id="points">0</span>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="points">⭐ <span id="points">0</span></div>
+      <div id="user-nav"></div>
     </div>
-  </div>
-
-  <!-- ===== SUBJECT ===== -->
-  <div class="subject-banner">
-    <h2 id="subjectTitle">No Subject Selected</h2>
   </div>
 
   <!-- ===== ACTIONS ===== -->
   <div class="dashboard-actions">
     <button class="action-btn asker" onclick="chooseRole('asker')">
-      DOUBT ASKER
+      <div class="btn-inner">
+        <span class="btn-icon">🙋</span>
+        <span class="btn-label">DOUBT ASKER</span>
+        <span class="btn-sublabel">Post a question for peers to solve</span>
+      </div>
     </button>
 
     <button class="action-btn solver" onclick="chooseRole('solver')">
-      DOUBT SOLVER
+      <div class="btn-inner">
+        <span class="btn-icon">🧠</span>
+        <span class="btn-label">DOUBT SOLVER</span>
+        <span class="btn-sublabel">Browse &amp; answer peer questions</span>
+      </div>
     </button>
   </div>
 
+  <script src="../js/navbar.js"></script>
   <script src="../js/dashboard.js"></script>
+</body>
+
+</html>

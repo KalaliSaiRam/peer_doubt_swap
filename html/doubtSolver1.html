@@ -1,44 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>DOUBT SOLVER | Peer Doubt Swap</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/doubtSolver1.css">
-    </head>
-    <body>
-        <!-- ===== HEADER ===== -->
-        <div class="header">
-            <div class="header-left">
-                <img src="../images/logo.png" alt="Logo">
-                <span>Peer Doubt Swap</span>
-            </div>
-            <div class="points">
-                ⭐ <span id="star-count">0</span>
-            </div>
-        </div>
 
-        <!-- ===== SUBJECT ===== -->
-        <div class="subject-banner">
-            <h2 id="display-selection">No Subject Selected</h2>
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <title>DOUBT SOLVER | Peer Doubt Swap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/doubtSolver1.css">
+</head>
 
-        <!-- ===== DOUBTS LIST ===== -->
-        <div class="doubts-section">
-            <p class="doubts-title">AVAILABLE DOUBTS</p>
-            <div style="display:flex; align-items:center; gap:10px; margin: 0 0 12px 0; flex-wrap:wrap;">
-                <label for="difficulty-filter" style="font-weight:700;">Difficulty:</label>
-                <select id="difficulty-filter" style="padding:10px 12px; border-radius:10px; border:1px solid #ddd; outline:none;">
+<body>
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <div class="header-left">
+            <img src="../images/logo.png" alt="Logo">
+            <span>Peer Doubt Swap</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div class="points">⭐ <span id="star-count">0</span></div>
+            <div id="user-nav"></div>
+        </div>
+    </div>
+
+    <!-- ===== DOUBTS LIST ===== -->
+    <div class="doubts-section">
+        <p class="doubts-title">AVAILABLE DOUBTS</p>
+
+        <div class="filter-row">
+            <div class="filter-item">
+                <label for="subject-filter">Subject:</label>
+                <select id="subject-filter">
+                    <option value="all">All Subjects</option>
+                    <option value="C">C</option>
+                    <option value="C++">C++</option>
+                    <option value="Python">Python</option>
+                    <option value="Java">Java</option>
+                    <option value="JavaScript">JavaScript</option>
+                    <option value="SQL">SQL</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label for="difficulty-filter">Difficulty:</label>
+                <select id="difficulty-filter">
                     <option value="all">All</option>
                     <option value="easy">Easy</option>
                     <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
                 </select>
             </div>
-            <div id="solver-list"></div>
         </div>
 
-        <script src="../js/doubtSolver1.js"></script>
-    </body>
-</html>
+        <div id="solver-list"></div>
+    </div>
 
+    <script src="../js/navbar.js"></script>
+    <script src="../js/doubtSolver1.js"></script>
+</body>
+
+</html>

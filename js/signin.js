@@ -1,4 +1,3 @@
-const BASE_URL = 'http://localhost:3000';
 
 // ── Input guard helpers ─────────────────────────────────────────────────────
 function preventSpaces(event) {
@@ -70,6 +69,157 @@ function preventInvalidCollegePaste(event) {
   event.target.value += clean;
 }
 
+// ── College list (IITs, NITs, IIITs) ────────────────────────────────────────
+const COLLEGES = [
+  // ── IITs (23) ──
+  'IIT Bombay', 'IIT Delhi', 'IIT Madras', 'IIT Kanpur', 'IIT Kharagpur',
+  'IIT Roorkee', 'IIT Guwahati', 'IIT Hyderabad',
+  'IIT Indore', 'IIT Ropar', 'IIT Mandi', 'IIT Jodhpur', 'IIT Patna',
+  'IIT Gandhinagar', 'IIT Bhubaneswar', 'IIT (BHU) Varanasi',
+  'IIT Tirupati', 'IIT Palakkad', 'IIT Jammu', 'IIT Dharwad',
+  'IIT Bhilai', 'IIT Goa', 'IIT (ISM) Dhanbad',
+
+  // ── NITs (31) ──
+  'NIT Trichy (NITT)', 'NIT Karnataka (Surathkal)', 'NIT Warangal (NITW)',
+  'MNIT Jaipur', 'MNNIT Allahabad', 'NIT Calicut (NITC)', 'VNIT Nagpur',
+  'MANIT Bhopal', 'NIT Rourkela', 'NIT Silchar', 'NIT Jamshedpur',
+  'NIT Hamirpur', 'NIT Patna', 'NIT Raipur', 'NIT Surat (SVNIT)',
+  'NIT Goa', 'NIT Delhi', 'NIT Arunachal Pradesh', 'NIT Manipur',
+  'NIT Meghalaya', 'NIT Mizoram', 'NIT Nagaland', 'NIT Sikkim',
+  'NIT Srinagar', 'NIT Uttarakhand', 'NIT Andhra Pradesh',
+  'NIT Puducherry', 'NIT Kurukshetra', 'NIT Durgapur',
+  'NIT Agartala', 'MNNIT Allahabad',
+
+  // ── IIITs (26+) ──
+  'IIIT Allahabad (IIITA)', 'ABV-IIITM Gwalior',
+  'IIITDM Jabalpur', 'IIITDM Kancheepuram',
+  'IIIT Guwahati', 'IIIT Kota', 'IIIT Sri City',
+  'IIIT Vadodara', 'IIIT Pune', 'IIIT Naya Raipur',
+  'IIIT Delhi', 'IIIT Bangalore', 'IIIT Hyderabad',
+  'IIIT Bhubaneswar', 'IIIT Kalyani', 'IIIT Kottayam',
+  'IIIT Lucknow', 'IIIT Dharwad', 'IIIT Tiruchirappalli',
+  'IIIT Manipur', 'IIIT Nagpur', 'IIIT Ranchi',
+  'IIIT Sonepat', 'IIIT Una', 'IIIT Agartala', 'IIIT Bhagalpur',
+  'IIIT Surat', 'IIIT Raichur', 'IIIT Bhopal',
+
+  // ── Top Engineering Colleges (Hyderabad / Telangana / AP) ──
+  'JNTUH University College of Engineering Hyderabad (JNTH)',
+  'JNTUH University College of Engineering - Integrated MTech (JNTHMT)',
+  'Chaitanya Bharathi Institute of Technology (CBIT)',
+  'VNR Vignana Jyothi Institute of Engineering and Technology (VJEC)',
+  'OU College of Engineering Hyderabad (OUCE)',
+  'CVR College of Engineering (CVRH)',
+  'SR University (SRHP)',
+  'Vasavi College of Engineering (VASV)',
+  'Gokaraju Rangaraju Institute of Engineering and Technology (GRRR)',
+  'Vardhaman College of Engineering (VMEG)',
+  'Mahatma Gandhi Institute of Technology (MGIT)',
+  'Sreenidhi Institute of Science and Technology (SNIS)',
+  'B V Raju Institute of Technology (BVRI)',
+  'Anurag University (CVSR)',
+  'Kakatiya Institute of Technology and Science (KITS)',
+  'MVSR Engineering College (MVSR)',
+  'Keshav Memorial Institute of Technology (KMIT)',
+  'Geetanjali College of Engineering and Technology (GCTC)',
+  'Malla Reddy Engineering College (MREC)',
+  'Guru Nanak Institute of Technology (GNIT)',
+  'Vaagdevi College of Engineering (VAGE)',
+  'Vidyajyothi Institute of Technology (VJIT)',
+  'Nalla Malla Reddy Engineering College (NREC)',
+  'MLR Institute of Technology (MLID)',
+  'KU College of Engineering and Technology (KUWL)',
+  'CMR Engineering College (CMRN)',
+  'CMR College of Engineering and Technology (CMRK)',
+  'St Martins Engineering College (MRTN)',
+  'Malla Reddy College of Engineering Technology (MLRD)',
+  'CMR Institute of Technology (CMRM)',
+  'ACE Engineering College (ACEG)',
+  'Marri Laxman Reddy Institute of Technology and Management (MLRS)',
+  'KG Reddy College of Engineering and Technology (KGRH)',
+  'Guru Nanak Institutions Technical Campus (GURU)',
+  'CMR Technical Campus (CMRG)',
+  'Sri Indu College of Engineering and Technology (INDU)',
+  'Hyderabad Institute of Technology and Management (HITM)',
+  'JNTUH University College of Engineering Jagtial (JNKR)',
+  'Kommuri Pratap Reddy Institute of Technology (KPRT)',
+  'Stanley College of Engineering and Technology for Women (STLW)',
+  'Nalla Narasimha Reddy Educational Society Group of Institutions (NNRG)',
+  'Teegala Krishna Reddy Engineering College (TKEM)',
+  'TKR College of Engineering and Technology (TKRC)',
+  'St Peters Engineering College (SPEC)',
+  'Sreyas Institute of Engineering and Technology (SRYS)',
+  'Sri Indu Institute of Engineering and Technology (INDI)',
+  'JB Institute of Engineering and Technology (JBIT)',
+  'Vignan Bharati Institute of Engineering and Technology (VBIT)',
+  'Malla Reddy Institute of Engineering and Technology (MRET)',
+  'Narsimha Reddy Engineering College (NRCM)',
+
+  // ── Others ──
+  'Others'
+];
+
+function showCollegeList() {
+  filterColleges();
+  document.getElementById('collegeDropdown').style.display = 'block';
+}
+
+function filterColleges() {
+  const query = document.getElementById('collegeSearch').value.toLowerCase();
+  const dropdown = document.getElementById('collegeDropdown');
+  dropdown.innerHTML = '';
+
+  const filtered = COLLEGES.filter(c => c.toLowerCase().includes(query));
+
+  if (filtered.length === 0) {
+    dropdown.innerHTML = '<div style="padding:10px 14px;color:#9ca3af;font-size:0.88rem;">No matches found</div>';
+    dropdown.style.display = 'block';
+    return;
+  }
+
+  filtered.forEach(name => {
+    const item = document.createElement('div');
+    item.textContent = name;
+    item.style.cssText = 'padding:8px 14px;cursor:pointer;font-size:0.9rem;border-bottom:1px solid #f3f4f6;transition:background 0.15s;';
+    item.onmouseenter = () => item.style.background = '#eff6ff';
+    item.onmouseleave = () => item.style.background = '';
+    item.onclick = () => selectCollege(name);
+    dropdown.appendChild(item);
+  });
+
+  dropdown.style.display = 'block';
+}
+
+function selectCollege(name) {
+  const searchInput = document.getElementById('collegeSearch');
+  const hiddenInput = document.getElementById('collegeName');
+  const otherInput = document.getElementById('collegeOther');
+  const dropdown = document.getElementById('collegeDropdown');
+
+  dropdown.style.display = 'none';
+
+  if (name === 'Others') {
+    searchInput.value = 'Others';
+    hiddenInput.value = '';
+    otherInput.style.display = 'block';
+    otherInput.focus();
+    otherInput.oninput = () => { hiddenInput.value = otherInput.value; };
+  } else {
+    searchInput.value = name;
+    hiddenInput.value = name;
+    otherInput.style.display = 'none';
+    otherInput.value = '';
+  }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function (e) {
+  const wrap = document.querySelector('.college-search-wrap');
+  const dd = document.getElementById('collegeDropdown');
+  if (wrap && dd && !wrap.contains(e.target)) {
+    dd.style.display = 'none';
+  }
+});
+
 // ── Student toggle ──────────────────────────────────────────────────────────
 const studentRadios = document.querySelectorAll('input[name="student"]');
 const academicSection = document.getElementById('academicSection');
@@ -121,8 +271,8 @@ function togglePassword(inputId, btn) {
   }
 }
 
-// ── Form submission → API call ──────────────────────────────────────────────
-document.getElementById('signupForm').addEventListener('submit', async function (event) {
+// ── Form submission ──────────────────────────────────────────────────────────
+document.getElementById('signupForm').addEventListener('submit', function (event) {
   event.preventDefault();
   clearErrors();
 
@@ -138,7 +288,7 @@ document.getElementById('signupForm').addEventListener('submit', async function 
   const confirm = document.getElementById('confirmPassword').value;
   const dob = document.getElementById('dob').value;
 
-  // Client-side validation (same rules as before)
+  // ── Client-side validation ──────────────────────────────────────────────
   let isValid = true;
 
   if (!/^(?=.*[a-z])(?=.*\d)[a-z0-9_]{6,}$/.test(username)) {
@@ -162,54 +312,11 @@ document.getElementById('signupForm').addEventListener('submit', async function 
   }
   if (!isValid) return;
 
-  // Gather all fields
-  const firstName = document.getElementById('firstName').value;
-  const lastName = document.getElementById('lastName').value;
-  const gender = document.querySelector('input[name="gender"]:checked')?.nextElementSibling?.innerText?.trim() || '';
-  const isStudentEl = document.querySelector('input[name="student"]:checked');
-  const isStudent = isStudentEl ? isStudentEl.value === 'yes' : false;
-  const collegeName = document.getElementById('collegeName')?.value || '';
-  const passoutYear = document.getElementById('passoutYear')?.value || '';
-  const branch = document.getElementById('branch')?.value || '';
+  // ── Store session & redirect ──────────────────────────────────────────
+  sessionStorage.setItem('pds_username', username);
+  sessionStorage.setItem('pds_stars', '0');
+  sessionStorage.setItem('pds_level', 'Bronze');
 
-  const submitBtn = this.querySelector('button[type="submit"]');
-  submitBtn.disabled = true;
-  submitBtn.innerText = 'Registering...';
-
-  try {
-    const res = await fetch(`${BASE_URL}/api/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        firstName, lastName, username, email, password: pass,
-        dob, gender, isStudent, collegeName, passoutYear, branch
-      })
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      const msg = data.error || 'Registration failed.';
-      showError('error-email', msg);
-      submitBtn.disabled = false;
-      submitBtn.innerText = 'SIGN-IN';
-      return;
-    }
-
-    // Store session
-    sessionStorage.setItem('pds_token', data.token);
-    sessionStorage.setItem('pds_userId', data.userId);
-    sessionStorage.setItem('pds_username', data.username);
-    sessionStorage.setItem('pds_stars', '0');
-    sessionStorage.setItem('pds_level', 'Bronze');
-
-    alert('Registration Successful! Welcome, ' + data.username + '!');
-    window.location.href = 'index.html';
-
-  } catch (err) {
-    showError('error-email', 'Cannot connect to server. Make sure the backend is running.');
-    console.error(err);
-    submitBtn.disabled = false;
-    submitBtn.innerText = 'SIGN-IN';
-  }
+  alert('Registration Successful! Welcome, ' + username + '!');
+  window.location.href = 'index.html';
 });
