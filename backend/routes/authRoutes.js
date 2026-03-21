@@ -62,7 +62,9 @@ router.post('/register', async (req, res) => {
     res.status(201).json({
       message: 'Registration successful!',
       token,
-      user: { id: result.insertId, username, first_name, last_name, email, stars: 0, level: 'Bronze' }
+      user: { id: result.insertId, username, first_name, last_name, email,
+              dob, gender, is_student, college_name, passout_year, branch,
+              stars: 0, level: 'Bronze' }
     });
 
   } catch (err) {
@@ -109,6 +111,12 @@ router.post('/login', async (req, res) => {
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
+        dob: user.dob,
+        gender: user.gender,
+        is_student: user.is_student,
+        college_name: user.college_name,
+        passout_year: user.passout_year,
+        branch: user.branch,
         stars: user.stars,
         level: user.level
       }

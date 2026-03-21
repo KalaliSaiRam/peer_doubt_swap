@@ -1,17 +1,36 @@
-// Step 1 — show reset fields (frontend-only, no email check)
-function showResetFields() {
+// Step 1 — verify email via API
+async function showResetFields() {
   const email = document.getElementById('reset-email').value.trim();
   if (!email.includes('@')) { alert('Please enter a valid email.'); return; }
 
-  sessionStorage.setItem('pds_reset_email', email);
-  document.getElementById('forgot-step-1').style.display = 'none';
-  document.getElementById('forgot-step-2').style.display = 'block';
+  try {
+      const res = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      
+      if (!res.ok) {
+          alert(data.error || 'Failed to verify email');
+          return;
+      }
+
+      sessionStorage.setItem('pds_reset_email', email);
+      document.getElementById('forgot-step-1').style.display = 'none';
+      document.getElementById('forgot-step-2').style.display = 'block';
+  } catch(e) {
+      alert('Network error. Please try again.');
+  }
 }
 
-// Step 2 — set new password (frontend-only)
-function handleReset() {
+// Step 2 — set new password via API
+async function handleReset() {
   const newPass = document.getElementById('new-password').value;
   const confirmPass = document.getElementById('confirm-password').value;
+  const email = sessionStorage.getItem('pds_reset_email');
+
+  if (!email) { alert('Session expired. Please try again.'); window.location.reload(); return; }
 
   if (newPass !== confirmPass || newPass.length < 8) {
     alert('Passwords must match and be at least 8 characters.');
@@ -23,9 +42,25 @@ function handleReset() {
     return;
   }
 
-  alert('Password updated successfully! Please log in.');
-  sessionStorage.removeItem('pds_reset_email');
-  window.location.href = 'index.html';
+  try {
+      const res = await fetch('/api/auth/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, new_password: newPass })
+      });
+      const data = await res.json();
+      
+      if (!res.ok) {
+          alert(data.error || 'Failed to reset password.');
+          return;
+      }
+
+      alert('Password updated successfully! Please log in.');
+      sessionStorage.removeItem('pds_reset_email');
+      window.location.href = 'index.html';
+  } catch(e) {
+      alert('Network error. Please try again.');
+  }
 }
 
 // Live feedback

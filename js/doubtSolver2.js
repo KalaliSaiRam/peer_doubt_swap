@@ -16,7 +16,7 @@ function updateEmptyState() {
   }
 }
 
-function addComment() {
+async function addComment() {
   const commentInput = document.getElementById('new-comment');
   const commentList = document.getElementById('comment-list');
   const doubtId = sessionStorage.getItem('pds_currentDoubtId');
@@ -24,31 +24,39 @@ function addComment() {
 
   if (!answerText) { alert('Please write something before posting.'); return; }
 
-  const username = sessionStorage.getItem('pds_username') || 'anonymous';
+  const token = sessionStorage.getItem('pds_token');
+  if (!token) { alert('You must be logged in to comment.'); return; }
 
-  // Save answer to local doubt store
-  const allDoubts = JSON.parse(sessionStorage.getItem('pds_localDoubts') || '[]');
-  const idx = allDoubts.findIndex(d => String(d.id) === String(doubtId));
-  if (idx !== -1) {
-    if (!allDoubts[idx].answers) allDoubts[idx].answers = [];
-    allDoubts[idx].answers.push({
-      solver_username: username,
-      answer_text: answerText,
-      created_at: new Date().toISOString()
-    });
-    sessionStorage.setItem('pds_localDoubts', JSON.stringify(allDoubts));
+  try {
+      const res = await fetch(`/api/doubts/${doubtId}/comments`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ content: answerText })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to post comment');
+
+      const li = document.createElement('li');
+      li.className = 'comment-item';
+      li.innerHTML = `<strong>@${data.comment.username}</strong>: ${data.comment.content}`;
+      commentList.appendChild(li);
+      commentInput.value = '';
+      updateEmptyState();
+
+      // Update stars
+      const currentStars = parseInt(sessionStorage.getItem('pds_stars') || '0');
+      sessionStorage.setItem('pds_stars', currentStars + 10);
+      const starEl = document.getElementById('star-count');
+      if (starEl) starEl.innerText = currentStars + 10;
+  } catch(e) {
+      alert(e.message);
   }
-
-  // Add to comment list in UI
-  const li = document.createElement('li');
-  li.className = 'comment-item';
-  li.innerHTML = `<strong>@${username}</strong>: ${answerText}`;
-  commentList.appendChild(li);
-  commentInput.value = '';
-  updateEmptyState();
 }
 
-window.onload = function () {
+window.onload = async function () {
   const subject = sessionStorage.getItem('pds_subjectName') || '';
   const difficulty = sessionStorage.getItem('pds_difficulty') || '';
   const question = sessionStorage.getItem('pds_currentQuestion') || 'No question found.';
@@ -64,22 +72,26 @@ window.onload = function () {
   if (diffEl && difficulty) diffEl.innerText = '⚡ ' + difficulty;
 
   const starEl = document.getElementById('star-count');
-  if (starEl) starEl.innerText = currentStars;
-
-  // Load existing answers for this doubt
-  if (doubtId) {
-    const allDoubts = JSON.parse(sessionStorage.getItem('pds_localDoubts') || '[]');
-    const doubt = allDoubts.find(d => String(d.id) === String(doubtId));
-    if (doubt && doubt.answers && doubt.answers.length > 0) {
-      const commentList = document.getElementById('comment-list');
-      doubt.answers.forEach(a => {
-        const li = document.createElement('li');
-        li.className = 'comment-item';
-        li.innerHTML = `<strong>@${a.solver_username}</strong>: ${a.answer_text}`;
-        commentList.appendChild(li);
-      });
-    }
-  }
+  if (starEl) starEl.innerText = parseInt(sessionStorage.getItem('pds_stars') || '0');
 
   updateEmptyState();
+
+  if (doubtId) {
+      try {
+          const res = await fetch(`/api/doubts/${doubtId}/comments`);
+          const comments = await res.json();
+          if (res.ok && comments.length > 0) {
+              const commentList = document.getElementById('comment-list');
+              comments.forEach(c => {
+                  const li = document.createElement('li');
+                  li.className = 'comment-item';
+                  li.innerHTML = `<strong>@${c.username}</strong>: ${c.content}`;
+                  commentList.appendChild(li);
+              });
+              updateEmptyState();
+          }
+      } catch(e) {
+          console.error('Failed to load comments', e);
+      }
+  }
 };

@@ -272,7 +272,7 @@ function togglePassword(inputId, btn) {
 }
 
 // ── Form submission ──────────────────────────────────────────────────────────
-document.getElementById('signupForm').addEventListener('submit', function (event) {
+document.getElementById('signupForm').addEventListener('submit', async function (event) {
   event.preventDefault();
   clearErrors();
 
@@ -282,11 +282,23 @@ document.getElementById('signupForm').addEventListener('submit', function (event
     return;
   }
 
-  const username = document.getElementById('username').value;
-  const email = document.getElementById('email').value;
+  const first_name = document.getElementById('firstName').value.trim();
+  const last_name = document.getElementById('lastName').value.trim();
+  const username = document.getElementById('username').value.trim();
+  const email = document.getElementById('email').value.trim();
   const pass = document.getElementById('password').value;
   const confirm = document.getElementById('confirmPassword').value;
   const dob = document.getElementById('dob').value;
+  
+  const genderEl = document.querySelector('input[name="gender"]:checked');
+  const gender = genderEl ? genderEl.value : '';
+
+  const studentEl = document.querySelector('input[name="student"]:checked');
+  const is_student = studentEl && studentEl.value === 'yes' ? true : false;
+  
+  const college_name = document.getElementById('collegeName').value.trim();
+  const passout_year = document.getElementById('passoutYear').value;
+  const branch = document.getElementById('branch').value;
 
   // ── Client-side validation ──────────────────────────────────────────────
   let isValid = true;
@@ -312,11 +324,54 @@ document.getElementById('signupForm').addEventListener('submit', function (event
   }
   if (!isValid) return;
 
-  // ── Store session & redirect ──────────────────────────────────────────
-  sessionStorage.setItem('pds_username', username);
-  sessionStorage.setItem('pds_stars', '0');
-  sessionStorage.setItem('pds_level', 'Bronze');
+  // ── API call to backend ──────────────────────────────────────────
+  try {
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerText;
+    submitBtn.innerText = 'Registering...';
+    submitBtn.disabled = true;
 
-  alert('Registration Successful! Welcome, ' + username + '!');
-  window.location.href = 'index.html';
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        first_name, last_name, username, email, password: pass,
+        dob, gender, is_student, college_name, passout_year, branch
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert('Error: ' + (data.error || 'Registration failed.'));
+      submitBtn.innerText = originalBtnText;
+      submitBtn.disabled = false;
+      return;
+    }
+
+    // ── Store session & redirect ──────────────────────────────────────────
+    sessionStorage.setItem('pds_username', data.user.username);
+    sessionStorage.setItem('pds_token', data.token);
+    sessionStorage.setItem('pds_stars', data.user.stars);
+    sessionStorage.setItem('pds_level', data.user.level);
+    sessionStorage.setItem('pds_first_name', data.user.first_name);
+    sessionStorage.setItem('pds_last_name', data.user.last_name || '');
+    sessionStorage.setItem('pds_email', data.user.email);
+    sessionStorage.setItem('pds_dob', data.user.dob || '');
+    sessionStorage.setItem('pds_gender', data.user.gender || '');
+    sessionStorage.setItem('pds_is_student', data.user.is_student || false);
+    sessionStorage.setItem('pds_college_name', data.user.college_name || '');
+    sessionStorage.setItem('pds_passout_year', data.user.passout_year || '');
+    sessionStorage.setItem('pds_branch', data.user.branch || '');
+
+    alert('Registration Successful! Welcome, ' + username + '!');
+    window.location.href = 'index.html';
+
+  } catch (error) {
+    console.error('Registration API error:', error);
+    alert('An error occurred connecting to the server. Make sure the backend is running.');
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.innerText = 'SIGN-IN';
+    submitBtn.disabled = false;
+  }
 });

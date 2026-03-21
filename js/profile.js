@@ -16,33 +16,30 @@ const LEVEL_COLORS = {
 };
 
 // ── Boot ─────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-    const username = sessionStorage.getItem('pds_username');
-    if (!username) { window.location.href = 'index.html'; return; }
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = sessionStorage.getItem('pds_token');
+    if (!token) { window.location.href = 'index.html'; return; }
 
-    const stars = parseInt(sessionStorage.getItem('pds_stars') || '0');
-    const level = sessionStorage.getItem('pds_level') || 'Bronze';
+    try {
+        const [profRes, askedRes, solvedRes] = await Promise.all([
+            fetch('/api/profile', { headers: { 'Authorization': 'Bearer ' + token } }),
+            fetch('/api/profile/doubts-asked', { headers: { 'Authorization': 'Bearer ' + token } }),
+            fetch('/api/profile/doubts-solved', { headers: { 'Authorization': 'Bearer ' + token } })
+        ]);
 
-    // Populate hero from sessionStorage
-    const userData = {
-        username: username,
-        stars: stars,
-        level: level,
-        first_name: username.charAt(0).toUpperCase() + username.slice(1),
-        last_name: '',
-        email: sessionStorage.getItem('pds_email') || '',
-        dob: '',
-        gender: '',
-        is_student: false,
-        college_name: '',
-        passout_year: '',
-        branch: '',
-        created_at: new Date().toISOString()
-    };
+        if (profRes.ok) {
+            const user = await profRes.json();
+            populateHero(user);
+            populateDetails(user);
+        }
 
-    populateHero(userData);
-    populateDetails(userData);
-    renderLists();
+        if (askedRes.ok) allAsked = await askedRes.json();
+        if (solvedRes.ok) allSolved = await solvedRes.json();
+
+        renderLists();
+    } catch (e) {
+        console.error('Error fetching profile data', e);
+    }
 
     // Filter button listeners
     document.querySelectorAll('.diff-btn').forEach(btn => {
@@ -176,7 +173,9 @@ function logout() {
     [
         'pds_username', 'pds_stars', 'pds_level',
         'pds_subjectId', 'pds_subjectName', 'pds_activeDoubt', 'pds_activeDoubtId',
-        'pds_currentQuestion', 'pds_currentDoubtId', 'pds_reset_email', 'pds_email'
+        'pds_currentQuestion', 'pds_currentDoubtId', 'pds_reset_email', 'pds_email',
+        'pds_first_name', 'pds_last_name', 'pds_dob', 'pds_gender', 'pds_is_student',
+        'pds_college_name', 'pds_passout_year', 'pds_branch', 'pds_token'
     ].forEach(k => sessionStorage.removeItem(k));
     window.location.href = 'index.html';
 }

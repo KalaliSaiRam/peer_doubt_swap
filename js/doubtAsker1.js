@@ -6,9 +6,8 @@ window.onload = function () {
 
 const SUBJECTS = ['C', 'C++', 'Python', 'Java'];
 
-let localDoubts = JSON.parse(sessionStorage.getItem('pds_localDoubts') || '[]');
 
-function postDoubt() {
+async function postDoubt() {
   const subjectSelect = document.getElementById('subject-select');
   const questionInput = document.getElementById('user-input');
   const difficultySelect = document.getElementById('difficulty-select');
@@ -26,24 +25,36 @@ function postDoubt() {
   if (!/[a-zA-Z]/.test(trimmed)) { alert('Question must contain text.'); return; }
   if (difficulty === '') { alert('Please select a difficulty level.'); return; }
 
-  const doubtId = Date.now();
-  const newDoubt = {
-    id: doubtId,
-    question: trimmed,
-    difficulty: difficulty,
-    subjectName: subject,
-    answers: []
-  };
+  const token = sessionStorage.getItem('pds_token');
+  if (!token) { alert('You must be logged in to post a doubt.'); return; }
 
-  localDoubts.push(newDoubt);
-  sessionStorage.setItem('pds_localDoubts', JSON.stringify(localDoubts));
+  try {
+      const res = await fetch('/api/doubts', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ subject, difficulty, question: trimmed })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to post doubt');
 
-  // Show inline success message
-  const successMsg = document.getElementById('post-success');
-  successMsg.style.display = 'block';
-  setTimeout(() => { successMsg.style.display = 'none'; }, 3000);
+      // Show inline success message
+      const successMsg = document.getElementById('post-success');
+      successMsg.style.display = 'block';
+      setTimeout(() => { successMsg.style.display = 'none'; }, 3000);
 
-  questionInput.value = '';
-  difficultySelect.value = '';
-  subjectSelect.value = '';
+      questionInput.value = '';
+      difficultySelect.value = '';
+      subjectSelect.value = '';
+
+      // Optimistically update stars count
+      const currentStars = parseInt(sessionStorage.getItem('pds_stars') || '0');
+      sessionStorage.setItem('pds_stars', currentStars + 5);
+      const starEl = document.getElementById('star-count');
+      if (starEl) starEl.innerText = currentStars + 5;
+  } catch (e) {
+      alert(e.message);
+  }
 }

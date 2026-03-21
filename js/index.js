@@ -1,4 +1,4 @@
-function handleLogin() {
+async function handleLogin() {
   const email = document.getElementById('email').value.trim();
   const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value.trim();
@@ -10,14 +10,46 @@ function handleLogin() {
     return;
   }
 
-  // Store basic session data (frontend-only)
-  sessionStorage.setItem('pds_username', username);
-  sessionStorage.setItem('pds_stars', '0');
-  sessionStorage.setItem('pds_level', 'Bronze');
+  try {
+    const submitBtn = document.querySelector('button.btn-primary[onclick="handleLogin()"]');
+    if (submitBtn) { submitBtn.innerText = 'Logging in...'; submitBtn.disabled = true; }
+    
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, username, password })
+    });
+    
+    const data = await response.json();
+    if (submitBtn) { submitBtn.innerText = 'Submit'; submitBtn.disabled = false; }
+    
+    if (!response.ok) {
+      feedback.style.color = 'red';
+      feedback.innerText = 'Error: ' + (data.error || 'Login failed.');
+      return;
+    }
+    
+    sessionStorage.setItem('pds_username', data.user.username);
+    sessionStorage.setItem('pds_token', data.token);
+    sessionStorage.setItem('pds_stars', data.user.stars);
+    sessionStorage.setItem('pds_level', data.user.level);
+    sessionStorage.setItem('pds_first_name', data.user.first_name);
+    sessionStorage.setItem('pds_last_name', data.user.last_name || '');
+    sessionStorage.setItem('pds_email', data.user.email);
+    sessionStorage.setItem('pds_dob', data.user.dob || '');
+    sessionStorage.setItem('pds_gender', data.user.gender || '');
+    sessionStorage.setItem('pds_is_student', data.user.is_student || false);
+    sessionStorage.setItem('pds_college_name', data.user.college_name || '');
+    sessionStorage.setItem('pds_passout_year', data.user.passout_year || '');
+    sessionStorage.setItem('pds_branch', data.user.branch || '');
 
-  feedback.style.color = 'green';
-  feedback.innerText = 'Login successful! Redirecting...';
-  setTimeout(() => window.location.href = 'dashboard.html', 500);
+    feedback.style.color = 'green';
+    feedback.innerText = 'Login successful! Redirecting...';
+    setTimeout(() => window.location.href = 'dashboard.html', 500);
+  } catch(e) {
+    feedback.style.color = 'red';
+    feedback.innerText = 'Error connecting to server. Please try again.';
+  }
 }
 
 function SignIn() {

@@ -9,11 +9,6 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/signin.css">
-<<<<<<< HEAD
-  <link rel="stylesheet" href="../css/theme.css">
-  <script>(function () { var t = localStorage.getItem('pds_theme') || 'light'; document.documentElement.setAttribute('data-theme', t); })();</script>
-=======
->>>>>>> c57884c7f29b600593b1aea08c500383e8fb9138
 
 </head>
 
@@ -59,11 +54,7 @@
               <input type="text" id="username" class="form-control" onkeydown="return allowUsernameChars(event)"
                 onpaste="return preventInvalidUsernamePaste(event)" required>
               <div class="invalid-feedback">
-<<<<<<< HEAD
                 Min 6 characters. Must contain at least one lowercase letter and one number. Underscore is optional.
-=======
-                Min 6 characters. Must contain at least one letter and one number. Underscore is optional.
->>>>>>> c57884c7f29b600593b1aea08c500383e8fb9138
               </div>
               <div id="error-username" class="invalid-feedback"></div>
             </div>
@@ -92,15 +83,15 @@
               <div class="col-md-6 mb-3">
                 <label>Gender</label><br>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="gender" required>
+                  <input class="form-check-input" type="radio" name="gender" value="Male" required>
                   <label class="form-check-label">Male</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="gender">
+                  <input class="form-check-input" type="radio" name="gender" value="Female">
                   <label class="form-check-label">Female</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="gender">
+                  <input class="form-check-input" type="radio" name="gender" value="Other">
                   <label class="form-check-label">Other</label>
                 </div>
               </div>
@@ -246,20 +237,8 @@
       </div>
     </div>
   </div>
-<<<<<<< HEAD
-  <!-- Floating theme toggle -->
-  <button
-    onclick="(function(){var h=document.documentElement,d=h.getAttribute('data-theme')==='dark',n=d?'light':'dark';h.setAttribute('data-theme',n);localStorage.setItem('pds_theme',n);})()"
-    title="Toggle light/dark"
-    style="position:fixed;top:14px;right:16px;z-index:999;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:1.1rem;backdrop-filter:blur(6px);">☀️&nbsp;🌙</button>
+
   <script src="../js/signin.js"></script>
 </body>
 
 </html>
-=======
-  <script src="../js/api.js"></script>
-  <script src="../js/signin.js"></script>
-</body>
-
-</html>
->>>>>>> c57884c7f29b600593b1aea08c500383e8fb9138

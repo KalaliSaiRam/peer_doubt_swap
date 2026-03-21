@@ -56,14 +56,14 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-// ── GET /api/doubts — List all doubts (with optional filters) ────────────────
+// ── GET /api/doubts — List all doubts (with optional filters, search, pagination) ────────────────
 router.get('/', async (req, res) => {
   try {
-    const { subject, difficulty } = req.query;
+    const { subject, difficulty, search, page = 1, limit = 10 } = req.query;
+    
+    const offset = (page - 1) * limit;
 
-    let sql = `
-      SELECT d.*, u.username,
-        (SELECT COUNT(*) FROM comments c WHERE c.doubt_id = d.id) AS answer_count
+    let baseSql = `
       FROM doubts d
       JOIN users u ON d.user_id = u.id
     `;
@@ -78,15 +78,40 @@ router.get('/', async (req, res) => {
       conditions.push('d.difficulty = ?');
       params.push(difficulty);
     }
-
-    if (conditions.length > 0) {
-      sql += ' WHERE ' + conditions.join(' AND ');
+    if (search) {
+      conditions.push('(d.question LIKE ? OR d.subject LIKE ?)');
+      params.push(`%${search}%`, `%${search}%`);
     }
 
-    sql += ' ORDER BY d.created_at DESC';
+    if (conditions.length > 0) {
+      baseSql += ' WHERE ' + conditions.join(' AND ');
+    }
+
+    // Count query
+    const [countRows] = await pool.query(`SELECT COUNT(*) as total ${baseSql}`, params);
+    const totalCount = countRows[0].total;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    // Data query
+    let sql = `
+      SELECT d.*, u.username,
+        (SELECT COUNT(*) FROM comments c WHERE c.doubt_id = d.id) AS answer_count
+      ${baseSql}
+      ORDER BY d.created_at DESC
+      LIMIT ? OFFSET ?
+    `;
+    
+    // Add pagination params as Numbers
+    params.push(parseInt(limit), parseInt(offset));
 
     const [rows] = await pool.query(sql, params);
-    res.json(rows);
+    
+    res.json({
+        doubts: rows,
+        currentPage: parseInt(page),
+        totalPages,
+        totalCount
+    });
 
   } catch (err) {
     console.error('Get doubts error:', err);

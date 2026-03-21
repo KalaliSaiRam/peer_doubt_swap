@@ -4,23 +4,7 @@
  * Also handles the global light/dark theme applied via data-theme on <html>.
  */
 (function () {
-  // ── 1. Apply saved theme immediately (before DOMContentLoaded) to avoid flash ──
-  const savedTheme = localStorage.getItem('pds_theme') || 'light';
-  document.documentElement.setAttribute('data-theme', savedTheme);
 
-  // ── 2. Inject theme.css <link> into <head> ───────────────────────────────────
-  (function injectThemeCSS() {
-    if (document.getElementById('pds-theme-css')) return;
-    const link = document.createElement('link');
-    link.id = 'pds-theme-css';
-    link.rel = 'stylesheet';
-    // Work out relative path to css/ from wherever we are
-    const scripts = document.getElementsByTagName('script');
-    const navbarSrc = Array.from(scripts).find(s => s.src && s.src.includes('navbar.js'));
-    const base = navbarSrc ? navbarSrc.src.replace('navbar.js', '') : '../js/';
-    link.href = base.replace('/js/', '/css/') + 'theme.css';
-    document.head.appendChild(link);
-  })();
 
   // ── 3. Redirect to login if not authenticated ─────────────────────────────────
   const username = sessionStorage.getItem('pds_username');
@@ -29,14 +13,7 @@
     return;
   }
 
-  // ── 4. Theme toggle function (exposed globally) ───────────────────────────────
-  window.toggleTheme = function () {
-    const html = document.documentElement;
-    const isDark = html.getAttribute('data-theme') === 'dark';
-    const next = isDark ? 'light' : 'dark';
-    html.setAttribute('data-theme', next);
-    localStorage.setItem('pds_theme', next);
-  };
+
 
   // ── 5. Build nav ──────────────────────────────────────────────────────────────
   function injectNav() {
@@ -58,13 +35,7 @@
     slot.innerHTML = `
       <div class="nav-user-chip">
 
-        <!-- ☀️ / 🌙 Theme toggle -->
-        <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle theme">
-          <span class="t-track">
-            <span class="t-icon sun-icon">☀️</span>
-            <span class="t-icon moon-icon">🌙</span>
-          </span>
-        </button>
+
 
         <!-- User avatar + name -->
         <a href="../html/profile.html" class="nav-username-link" title="View Profile">

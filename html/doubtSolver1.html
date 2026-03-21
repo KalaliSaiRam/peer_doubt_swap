@@ -16,7 +16,7 @@
             <span>Peer Doubt Swap</span>
         </div>
         <div style="display:flex;align-items:center;gap:12px;">
-            <div class="points">⭐ <span id="star-count">0</span></div>
+
             <div id="user-nav"></div>
         </div>
     </div>
@@ -26,6 +26,10 @@
         <p class="doubts-title">AVAILABLE DOUBTS</p>
 
         <div class="filter-row">
+            <div class="filter-item" style="flex: 2;">
+                <label for="search-input">Search Doubts:</label>
+                <input type="text" id="search-input" placeholder="Search questions or keywords..." />
+            </div>
             <div class="filter-item">
                 <label for="subject-filter">Subject:</label>
                 <select id="subject-filter">
@@ -50,18 +54,17 @@
         </div>
 
         <div id="solver-list"></div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-row" id="pagination-controls" style="display: none;">
+            <button id="btn-prev" onclick="changePage(-1)">◀ Previous</button>
+            <span id="page-info">Page 1 of 1</span>
+            <button id="btn-next" onclick="changePage(1)">Next ▶</button>
+        </div>
     </div>
 
-<<<<<<< HEAD
     <script src="../js/navbar.js"></script>
     <script src="../js/doubtSolver1.js"></script>
 </body>
 
 </html>
-=======
-    <script src="../js/api.js"></script>`n  <script src="../js/navbar.js"></script>
-    <script src="../js/doubtSolver1.js"></script>
-</body>
-
-</html>
->>>>>>> c57884c7f29b600593b1aea08c500383e8fb9138
