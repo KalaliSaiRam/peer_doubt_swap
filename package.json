@@ -1,11 +1,11 @@
 {
-  "name": "peer-doubt-swap-backend",
+  "name": "peer-doubt-swap",
   "version": "1.0.0",
-  "description": "Backend API for Peer Doubt Swap — Node.js + MySQL",
-  "main": "server.js",
+  "description": "Standard Node.js entry point for Peer Doubt Swap",
+  "main": "backend/server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
+    "start": "node backend/server.js",
+    "dev": "node --watch backend/server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
