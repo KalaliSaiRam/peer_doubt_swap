@@ -289,6 +289,19 @@ body {
     box-shadow: 0 4px 14px rgba(26, 86, 219, 0.1);
 }
 
+/* Opened from notification — scroll target */
+.comment-item.comment-item--targeted {
+    border-left-color: #f59e0b;
+    background: linear-gradient(90deg, #fffbeb 0%, #f8faff 100%);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.45), 0 8px 24px rgba(26, 86, 219, 0.15);
+    animation: pds-comment-flash 0.8s ease-out;
+}
+
+@keyframes pds-comment-flash {
+    from { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.7); }
+    to { box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.45), 0 8px 24px rgba(26, 86, 219, 0.15); }
+}
+
 .empty-msg {
     text-align: center;
     color: #9ca3af;

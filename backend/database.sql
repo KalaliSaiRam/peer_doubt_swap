@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS users (
   branch        VARCHAR(100) DEFAULT NULL,
   stars         INT          DEFAULT 0,
   level         VARCHAR(20)  DEFAULT 'Bronze',
+  notifications_last_read_at TIMESTAMP NULL DEFAULT NULL,
   created_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -49,16 +50,3 @@ CREATE TABLE IF NOT EXISTS comments (
   FOREIGN KEY (user_id)  REFERENCES users(id)  ON DELETE CASCADE
 );
 
--- ── Stars Log (tracks who gave stars to whom) ────────────────
-CREATE TABLE IF NOT EXISTS stars_log (
-  id           INT AUTO_INCREMENT PRIMARY KEY,
-  from_user_id INT NOT NULL,
-  to_user_id   INT NOT NULL,
-  comment_id   INT NOT NULL,
-  doubt_id     INT NOT NULL,
-  created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (from_user_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (to_user_id)   REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (comment_id)   REFERENCES comments(id) ON DELETE CASCADE,
-  FOREIGN KEY (doubt_id)     REFERENCES doubts(id) ON DELETE CASCADE
-);

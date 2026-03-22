@@ -1,4 +1,8 @@
-let currentStars = parseInt(sessionStorage.getItem('pds_stars') || '0');
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
 
 function updateEmptyState() {
   const commentList = document.getElementById('comment-list');
@@ -41,7 +45,11 @@ async function addComment() {
 
       const li = document.createElement('li');
       li.className = 'comment-item';
-      li.innerHTML = `<strong>@${data.comment.username}</strong>: ${data.comment.content}`;
+      if (data.comment && data.comment.id != null) {
+        li.id = 'pds-comment-' + data.comment.id;
+        li.setAttribute('data-comment-id', data.comment.id);
+      }
+      li.innerHTML = `<strong>@${escHtml(data.comment.username)}</strong>: ${escHtml(data.comment.content)}`;
       commentList.appendChild(li);
       commentInput.value = '';
       updateEmptyState();
@@ -56,7 +64,37 @@ async function addComment() {
   }
 }
 
+function scrollToSolutionComment(commentId) {
+  if (!commentId) return;
+  const id = String(commentId).trim();
+  const el = document.getElementById('pds-comment-' + id);
+  if (!el) return;
+  el.classList.add('comment-item--targeted');
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(function () {
+    el.classList.remove('comment-item--targeted');
+  }, 5000);
+}
+
 window.onload = async function () {
+  const params = new URLSearchParams(window.location.search);
+  const commentIdFromUrl = params.get('commentId');
+  const doubtIdFromUrl = params.get('doubtId');
+  if (doubtIdFromUrl) {
+    try {
+      const res = await fetch('/api/doubts/' + encodeURIComponent(doubtIdFromUrl));
+      const d = await res.json();
+      if (res.ok && d && d.id) {
+        sessionStorage.setItem('pds_currentDoubtId', String(d.id));
+        sessionStorage.setItem('pds_subjectName', d.subject || '');
+        sessionStorage.setItem('pds_difficulty', d.difficulty || '');
+        sessionStorage.setItem('pds_currentQuestion', d.question || '');
+      }
+    } catch (e) {
+      console.warn('Could not load doubt from URL', e);
+    }
+  }
+
   const subject = sessionStorage.getItem('pds_subjectName') || '';
   const difficulty = sessionStorage.getItem('pds_difficulty') || '';
   const question = sessionStorage.getItem('pds_currentQuestion') || 'No question found.';
@@ -85,10 +123,17 @@ window.onload = async function () {
               comments.forEach(c => {
                   const li = document.createElement('li');
                   li.className = 'comment-item';
-                  li.innerHTML = `<strong>@${c.username}</strong>: ${c.content}`;
+                  if (c.id != null) {
+                    li.id = 'pds-comment-' + c.id;
+                    li.setAttribute('data-comment-id', c.id);
+                  }
+                  li.innerHTML = `<strong>@${escHtml(c.username)}</strong>: ${escHtml(c.content)}`;
                   commentList.appendChild(li);
               });
               updateEmptyState();
+              if (commentIdFromUrl) {
+                scrollToSolutionComment(commentIdFromUrl);
+              }
           }
       } catch(e) {
           console.error('Failed to load comments', e);

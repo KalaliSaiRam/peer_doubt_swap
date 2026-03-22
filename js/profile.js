@@ -118,16 +118,20 @@ function renderAsked() {
         return;
     }
 
-    list.innerHTML = items.map(d => `
-    <div class="doubt-item">
+    list.innerHTML = items.map(d => {
+      const href = 'doubtSolver2.html?doubtId=' + encodeURIComponent(d.doubt_id);
+      return `
+    <a class="doubt-item clickable" href="${href}">
       <div class="doubt-item-question">${escHtml(d.question)}</div>
       <div class="doubt-item-meta">
         ${diffBadge(d.difficulty)}
         <span>📚 ${escHtml(d.subject_name)}</span>
         <span>💬 ${d.answer_count} answer(s)</span>
+        <span style="color:#4ade80">→ Open solutions</span>
       </div>
-    </div>
-  `).join('');
+    </a>
+  `;
+    }).join('');
 }
 
 function renderSolved() {
@@ -140,25 +144,22 @@ function renderSolved() {
         return;
     }
 
-    list.innerHTML = items.map(d => `
-    <a class="doubt-item clickable"
-       href="doubtAsker2.html"
-       onclick="selectSolvedDoubt(event, '${escHtml(d.question)}', ${d.doubt_id})">
+    list.innerHTML = items.map(d => {
+      let href = 'doubtSolver2.html?doubtId=' + encodeURIComponent(d.doubt_id);
+      if (d.my_comment_id != null) {
+        href += '&commentId=' + encodeURIComponent(d.my_comment_id);
+      }
+      return `
+    <a class="doubt-item clickable" href="${href}">
       <div class="doubt-item-question">${escHtml(d.question)}</div>
       <div class="doubt-item-meta">
         ${diffBadge(d.difficulty)}
         <span>📚 ${escHtml(d.subject_name)}</span>
-        <span style="color:#4ade80">🔗 View Solution</span>
+        <span style="color:#4ade80">→ View solution thread</span>
       </div>
     </a>
-  `).join('');
-}
-
-function selectSolvedDoubt(event, question, doubtId) {
-    event.preventDefault();
-    sessionStorage.setItem('pds_activeDoubt', question);
-    sessionStorage.setItem('pds_activeDoubtId', doubtId);
-    window.location.href = 'doubtAsker2.html';
+  `;
+    }).join('');
 }
 
 function escHtml(str) {

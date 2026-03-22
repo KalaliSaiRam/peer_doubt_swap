@@ -26,13 +26,15 @@ const STARTERS = {
 };
 
 // Populate starter when language changes
-document.getElementById('lang-select').addEventListener('change', function () {
-    const editor = document.getElementById('code-editor');
-    editor.value = STARTERS[this.value] || '';
-});
-
-// Initialize with Python starter
 window.addEventListener('DOMContentLoaded', () => {
+    const langSel = document.getElementById('lang-select');
+    if (langSel) {
+        langSel.addEventListener('change', function () {
+            const editor = document.getElementById('code-editor');
+            if (editor) editor.value = STARTERS[this.value] || '';
+        });
+    }
+
     const sel = document.getElementById('lang-select');
     if (sel) sel.value = 'python';
     const editor = document.getElementById('code-editor');

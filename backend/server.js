@@ -27,11 +27,15 @@ const authRoutes = require('./routes/authRoutes');
 const doubtRoutes = require('./routes/doubtRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
+const leaderboardRoutes = require('./routes/leaderboardRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/doubts', doubtRoutes);
 app.use('/api/doubts', commentRoutes);       // comments are nested under /api/doubts/:id/comments
 app.use('/api/profile', profileRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
 
 // ── Root redirect ────────────────────────────────────────────────────────────
 app.get('/', (req, res) => {

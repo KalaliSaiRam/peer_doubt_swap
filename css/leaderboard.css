@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f0f4ff 0%, #fafbff 50%, #f5f0ff 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADER ─────────────────────────────────── */
+.header {
+  background: linear-gradient(90deg, #1a56db 0%, #1e40af 100%);
+  color: white;
+  padding: 0 40px;
+  height: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 20px rgba(26, 86, 219, 0.35);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-left img {
+  height: 38px;
+  width: 38px;
+  border-radius: 8px;
+  background: white;
+  padding: 4px;
+  object-fit: contain;
+}
+
+.header-left span {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* ── CONTENT ─────────────────────────────────── */
+.lb-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.lb-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(26, 86, 219, 0.1);
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 900px;
+  height: fit-content;
+}
+
+.lb-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e40af;
+  margin-bottom: 4px;
+}
+
+.lb-subtitle {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 28px;
+}
+
+/* ── TABLE ─────────────────────────────────── */
+.lb-table-wrap {
+  overflow-x: auto;
+}
+
+.lb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.lb-table thead tr {
+  background: linear-gradient(90deg, #1a56db, #1e40af);
+  color: white;
+}
+
+.lb-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.lb-table th:first-child { border-radius: 8px 0 0 8px; }
+.lb-table th:last-child  { border-radius: 0 8px 8px 0; }
+
+.lb-table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.15s;
+}
+
+.lb-table tbody tr:hover {
+  background: #eff6ff;
+}
+
+.lb-table td {
+  padding: 13px 16px;
+  color: #374151;
+  vertical-align: middle;
+}
+
+/* rank medals */
+.rank-cell {
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
+  width: 60px;
+}
+
+.rank-1 { color: #f59e0b; }
+.rank-2 { color: #9ca3af; }
+.rank-3 { color: #cd7f32; }
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lb-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lb-username {
+  font-weight: 600;
+  color: #111827;
+}
+
+.lb-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
+.lb-stars {
+  font-weight: 700;
+  color: #d97706;
+}
+
+.lb-loading {
+  text-align: center;
+  padding: 32px;
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.lb-empty {
+  text-align: center;
+  padding: 32px;
+  color: #9ca3af;
+}

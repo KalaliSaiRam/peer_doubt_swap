@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Leaderboard | Peer Doubt Swap</title>
+  <link rel="stylesheet" href="../css/leaderboard.css">
+</head>
+
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <div class="header">
+    <div class="header-left">
+      <img src="../images/logo.png" alt="Logo">
+      <span>Peer Doubt Swap</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div id="user-nav"></div>
+    </div>
+  </div>
+
+  <!-- ===== CONTENT ===== -->
+  <div class="lb-container">
+    <div class="lb-card">
+      <div class="lb-title">🏆 Leaderboard</div>
+      <div class="lb-subtitle">Top performers ranked by stars earned</div>
+
+      <div class="lb-table-wrap">
+        <table class="lb-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>User</th>
+              <th>Doubts Asked</th>
+              <th>Doubts Solved</th>
+              <th>Stars</th>
+              <th>Badge</th>
+            </tr>
+          </thead>
+          <tbody id="lb-body">
+            <tr><td colspan="6" class="lb-loading">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/navbar.js"></script>
+  <script src="../js/leaderboard.js"></script>
+</body>
+
+</html>

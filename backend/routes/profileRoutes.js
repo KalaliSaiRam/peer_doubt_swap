@@ -50,13 +50,17 @@ router.get('/doubts-asked', auth, async (req, res) => {
 router.get('/doubts-solved', auth, async (req, res) => {
   try {
     const [rows] = await pool.query(
-      `SELECT DISTINCT d.id AS doubt_id, d.question, d.subject AS subject_name, d.difficulty, d.created_at,
-        (SELECT COUNT(*) FROM comments c2 WHERE c2.doubt_id = d.id) AS answer_count
+      `SELECT d.id AS doubt_id, d.question, d.subject AS subject_name, d.difficulty, d.created_at,
+        (SELECT COUNT(*) FROM comments c2 WHERE c2.doubt_id = d.id) AS answer_count,
+        (SELECT c3.id FROM comments c3
+         WHERE c3.doubt_id = d.id AND c3.user_id = ?
+         ORDER BY c3.created_at DESC LIMIT 1) AS my_comment_id
        FROM doubts d
-       JOIN comments c ON c.doubt_id = d.id
-       WHERE c.user_id = ?
+       WHERE EXISTS (
+         SELECT 1 FROM comments c WHERE c.doubt_id = d.id AND c.user_id = ?
+       )
        ORDER BY d.created_at DESC`,
-      [req.user.id]
+      [req.user.id, req.user.id]
     );
 
     res.json(rows);

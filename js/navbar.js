@@ -1,21 +1,16 @@
 /**
  * navbar.js — shared across all post-login pages
- * Injects a username chip + star/level badge + theme toggle into the page header.
- * Also handles the global light/dark theme applied via data-theme on <html>.
+ * Injects notification bell + username chip + star/level badge.
  */
 (function () {
-
-
-  // ── 3. Redirect to login if not authenticated ─────────────────────────────────
   const username = sessionStorage.getItem('pds_username');
   if (!username) {
-    window.location.href = '../html/index.html';
+    window.location.href = '/html/index.html';
     return;
   }
 
+  const POLL_MS = 25000;
 
-
-  // ── 5. Build nav ──────────────────────────────────────────────────────────────
   function injectNav() {
     const slot = document.getElementById('user-nav');
     if (!slot) return;
@@ -33,21 +28,147 @@
     const color = levelColors[level] || '#cd7f32';
 
     slot.innerHTML = `
-      <div class="nav-user-chip">
+      <div class="pds-nav-row">
+        <div class="pds-notif-wrap" id="pds-notif-wrap">
+          <button type="button" class="pds-notif-bell" id="pds-notif-bell" aria-label="Notifications" title="Notifications">
+            <svg class="pds-notif-bell-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="pds-notif-badge" id="pds-notif-badge" style="display:none;">0</span>
+          </button>
+          <div class="pds-notif-dropdown" id="pds-notif-dropdown" role="menu" hidden>
+            <div class="pds-notif-head">New activity on your doubts</div>
+            <div class="pds-notif-list" id="pds-notif-list"></div>
+            <div class="pds-notif-foot">
+              <button type="button" class="pds-notif-mark" id="pds-notif-mark">Mark all as read</button>
+            </div>
+          </div>
+        </div>
 
-
-
-        <!-- User avatar + name -->
-        <a href="../html/profile.html" class="nav-username-link" title="View Profile">
-          <span class="nav-avatar">${username.charAt(0).toUpperCase()}</span>
-          <span class="nav-username">${username}</span>
-        </a>
-
-        <span class="nav-stars">⭐ ${stars}</span>
-        <span class="nav-level" style="background:${color};color:#111;">${level}</span>
+        <div class="nav-user-chip">
+          <a href="../html/profile.html" class="nav-username-link" title="View Profile">
+            <span class="nav-avatar">${username.charAt(0).toUpperCase()}</span>
+            <span class="nav-username">${username}</span>
+          </a>
+          <span class="nav-stars">⭐ ${stars}</span>
+          <span class="nav-level" style="background:${color};color:#111;">${level}</span>
+        </div>
       </div>
 
       <style>
+        .pds-nav-row {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+        .pds-notif-wrap {
+          position: relative;
+        }
+        .pds-notif-bell {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 42px;
+          height: 42px;
+          border: none;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.15);
+          color: rgba(255,255,255,0.92);
+          cursor: pointer;
+          transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+        .pds-notif-bell:hover {
+          background: rgba(255,255,255,0.28);
+          transform: scale(1.05);
+        }
+        .pds-notif-bell.pds-notif-bell--live {
+          background: rgba(251, 191, 36, 0.35);
+          color: #fff;
+          box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.55), 0 0 18px rgba(251, 146, 60, 0.85);
+          animation: pds-bell-pulse 1.6s ease-in-out infinite;
+        }
+        @keyframes pds-bell-pulse {
+          0%, 100% { box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.45), 0 0 14px rgba(251, 146, 60, 0.6); }
+          50% { box-shadow: 0 0 0 5px rgba(251, 191, 36, 0.7), 0 0 22px rgba(251, 146, 60, 1); }
+        }
+        .pds-notif-badge {
+          position: absolute;
+          top: 4px;
+          right: 4px;
+          min-width: 18px;
+          height: 18px;
+          padding: 0 5px;
+          border-radius: 999px;
+          background: #ef4444;
+          color: #fff;
+          font-size: 0.68rem;
+          font-weight: 800;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          line-height: 1;
+        }
+        .pds-notif-dropdown {
+          position: absolute;
+          top: calc(100% + 8px);
+          right: 0;
+          width: min(340px, 92vw);
+          max-height: 380px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          background: #fff;
+          color: #111827;
+          border-radius: 12px;
+          box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+          z-index: 200;
+          border: 1px solid #e5e7eb;
+        }
+        .pds-notif-head {
+          padding: 12px 14px;
+          font-weight: 700;
+          font-size: 0.9rem;
+          border-bottom: 1px solid #f3f4f6;
+          background: linear-gradient(180deg, #f9fafb, #fff);
+        }
+        .pds-notif-list {
+          overflow-y: auto;
+          max-height: 260px;
+        }
+        .pds-notif-item {
+          display: block;
+          padding: 10px 14px;
+          border-bottom: 1px solid #f3f4f6;
+          text-decoration: none;
+          color: inherit;
+          font-size: 0.86rem;
+          transition: background 0.15s;
+        }
+        .pds-notif-item:hover { background: #eff6ff; }
+        .pds-notif-item strong { color: #1d4ed8; }
+        .pds-notif-item small { display: block; color: #6b7280; margin-top: 4px; font-size: 0.75rem; }
+        .pds-notif-empty {
+          padding: 16px 14px;
+          color: #6b7280;
+          font-size: 0.86rem;
+        }
+        .pds-notif-foot {
+          padding: 8px 10px;
+          border-top: 1px solid #f3f4f6;
+          text-align: center;
+        }
+        .pds-notif-mark {
+          background: none;
+          border: none;
+          color: #2563eb;
+          font-weight: 600;
+          font-size: 0.82rem;
+          cursor: pointer;
+          padding: 6px 8px;
+        }
+        .pds-notif-mark:hover { text-decoration: underline; }
         .nav-user-chip {
           display: flex;
           align-items: center;
@@ -80,7 +201,7 @@
           color: inherit;
           transition: color 0.2s;
         }
-        .nav-username-link:hover .nav-username { color: #f97316; }
+        .nav-username-link:hover .nav-username { color: #fbbf24; }
         .nav-stars {
           font-size: 0.85rem;
           font-weight: 600;
@@ -94,6 +215,120 @@
         }
       </style>
     `;
+
+    setupNotifications();
+  }
+
+  function authHeaders() {
+    const token = sessionStorage.getItem('pds_token');
+    const h = { 'Content-Type': 'application/json' };
+    if (token) h.Authorization = 'Bearer ' + token;
+    return h;
+  }
+
+  function updateBellUI(count) {
+    const bell = document.getElementById('pds-notif-bell');
+    const badge = document.getElementById('pds-notif-badge');
+    if (!bell || !badge) return;
+    const n = Math.min(99, parseInt(count, 10) || 0);
+    if (n > 0) {
+      bell.classList.add('pds-notif-bell--live');
+      badge.style.display = 'flex';
+      badge.textContent = n > 99 ? '99+' : String(n);
+    } else {
+      bell.classList.remove('pds-notif-bell--live');
+      badge.style.display = 'none';
+    }
+  }
+
+  function renderList(items) {
+    const listEl = document.getElementById('pds-notif-list');
+    if (!listEl) return;
+    if (!items || items.length === 0) {
+      listEl.innerHTML = '<div class="pds-notif-empty">No new replies right now.</div>';
+      return;
+    }
+    listEl.innerHTML = items.map(function (it) {
+      const q = (it.question_preview || '').replace(/</g, '&lt;');
+      const who = (it.from_username || 'Someone').replace(/</g, '&lt;');
+      const cid = it.comment_id != null ? encodeURIComponent(it.comment_id) : '';
+      const href = 'doubtSolver2.html?doubtId=' + encodeURIComponent(it.doubt_id) +
+        (cid ? '&commentId=' + cid : '');
+      return (
+        '<a class="pds-notif-item" href="' + href + '">' +
+        '<strong>@' + who + '</strong> replied to your doubt' +
+        '<small>' + q + (q.length >= 100 ? '…' : '') + '</small>' +
+        '</a>'
+      );
+    }).join('');
+  }
+
+  async function fetchNotifications() {
+    const token = sessionStorage.getItem('pds_token');
+    if (!token) return;
+    try {
+      const res = await fetch('/api/notifications', { headers: authHeaders() });
+      const data = await res.json().catch(function () { return {}; });
+      const count = typeof data.unreadCount === 'number' ? data.unreadCount : 0;
+      updateBellUI(count);
+      window.__pdsLastNotifItems = Array.isArray(data.items) ? data.items : [];
+    } catch (e) {
+      console.warn('Notifications poll failed', e);
+    }
+  }
+
+  async function markAllRead() {
+    const token = sessionStorage.getItem('pds_token');
+    if (!token) return;
+    try {
+      await fetch('/api/notifications/mark-read', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: '{}'
+      });
+      updateBellUI(0);
+      renderList([]);
+    } catch (e) {
+      console.warn('Mark read failed', e);
+    }
+  }
+
+  function setupNotifications() {
+    const wrap = document.getElementById('pds-notif-wrap');
+    const bell = document.getElementById('pds-notif-bell');
+    const dropdown = document.getElementById('pds-notif-dropdown');
+    const markBtn = document.getElementById('pds-notif-mark');
+    if (!wrap || !bell || !dropdown) return;
+
+    bell.addEventListener('click', async function (e) {
+      e.stopPropagation();
+      const open = !dropdown.hidden;
+      if (open) {
+        dropdown.hidden = true;
+        return;
+      }
+      dropdown.hidden = false;
+      await fetchNotifications();
+      renderList(window.__pdsLastNotifItems || []);
+    });
+
+    if (markBtn) {
+      markBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        markAllRead();
+        dropdown.hidden = true;
+      });
+    }
+
+    document.addEventListener('click', function () {
+      dropdown.hidden = true;
+    });
+    wrap.addEventListener('click', function (e) {
+      e.stopPropagation();
+    });
+
+    fetchNotifications();
+    setInterval(fetchNotifications, POLL_MS);
   }
 
   if (document.readyState === 'loading') {
