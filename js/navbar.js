@@ -37,7 +37,7 @@
             </svg>
             <span class="pds-notif-badge" id="pds-notif-badge" style="display:none;">0</span>
           </button>
-          <div class="pds-notif-dropdown" id="pds-notif-dropdown" role="menu" hidden>
+          <div class="pds-notif-dropdown" id="pds-notif-dropdown" role="menu">
             <div class="pds-notif-head">New activity on your doubts</div>
             <div class="pds-notif-list" id="pds-notif-list"></div>
             <div class="pds-notif-foot">
@@ -117,7 +117,7 @@
           width: min(340px, 92vw);
           max-height: 380px;
           overflow: hidden;
-          display: flex;
+          display: none;
           flex-direction: column;
           background: #fff;
           color: #111827;
@@ -125,6 +125,9 @@
           box-shadow: 0 16px 40px rgba(0,0,0,0.18);
           z-index: 200;
           border: 1px solid #e5e7eb;
+        }
+        .pds-notif-dropdown.pds-open {
+          display: flex;
         }
         .pds-notif-head {
           padding: 12px 14px;
@@ -302,12 +305,12 @@
 
     bell.addEventListener('click', async function (e) {
       e.stopPropagation();
-      const open = !dropdown.hidden;
+      const open = dropdown.classList.contains('pds-open');
       if (open) {
-        dropdown.hidden = true;
+        dropdown.classList.remove('pds-open');
         return;
       }
-      dropdown.hidden = false;
+      dropdown.classList.add('pds-open');
       await fetchNotifications();
       renderList(window.__pdsLastNotifItems || []);
     });
@@ -316,12 +319,12 @@
       markBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         markAllRead();
-        dropdown.hidden = true;
+        dropdown.classList.remove('pds-open');
       });
     }
 
     document.addEventListener('click', function () {
-      dropdown.hidden = true;
+      dropdown.classList.remove('pds-open');
     });
     wrap.addEventListener('click', function (e) {
       e.stopPropagation();

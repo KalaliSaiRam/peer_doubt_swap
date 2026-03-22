@@ -25,20 +25,31 @@ const STARTERS = {
     'sql': 'CREATE TABLE students (id INTEGER PRIMARY KEY, name TEXT, grade INTEGER);\nINSERT INTO students VALUES (1, \'Alice\', 90);\nINSERT INTO students VALUES (2, \'Bob\', 78);\nSELECT * FROM students WHERE grade > 80;\n'
 };
 
-// Populate starter when language changes
+// Map doubt subject to compiler language key
+const SUBJECT_TO_LANG = {
+    'c':          'c',
+    'c++':        'c++',
+    'python':     'python',
+    'java':       'java',
+    'javascript': 'javascript',
+    'sql':        'sql'
+};
+
 window.addEventListener('DOMContentLoaded', () => {
     const langSel = document.getElementById('lang-select');
-    if (langSel) {
-        langSel.addEventListener('change', function () {
-            const editor = document.getElementById('code-editor');
-            if (editor) editor.value = STARTERS[this.value] || '';
-        });
-    }
+    const editor  = document.getElementById('code-editor');
+    if (!langSel || !editor) return;
 
-    const sel = document.getElementById('lang-select');
-    if (sel) sel.value = 'python';
-    const editor = document.getElementById('code-editor');
-    if (editor && !editor.value.trim()) editor.value = STARTERS['python'];
+    // Pick language from the current doubt's subject
+    const subject = (sessionStorage.getItem('pds_subjectName') || '').toLowerCase().trim();
+    const defaultLang = SUBJECT_TO_LANG[subject] || 'python';
+
+    langSel.value = defaultLang;
+    editor.value  = STARTERS[defaultLang] || '';
+
+    langSel.addEventListener('change', function () {
+        editor.value = STARTERS[this.value] || '';
+    });
 });
 
 async function runCode() {
