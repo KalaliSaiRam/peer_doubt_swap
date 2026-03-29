@@ -14,8 +14,9 @@ body {
   padding: 0 32px;
   height: 64px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+  gap: 12px;
   box-shadow: 0 2px 20px rgba(26, 86, 219, 0.35);
 }
 
