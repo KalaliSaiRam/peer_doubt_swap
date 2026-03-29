@@ -10,7 +10,7 @@ const auth = require('../middleware/auth');
 router.get('/', auth, async (req, res) => {
   try {
     const [rows] = await pool.query(
-      'SELECT id, first_name, last_name, username, email, dob, gender, is_student, college_name, passout_year, branch, stars, level, created_at FROM users WHERE id = ?',
+      'SELECT id, first_name, last_name, username, email, dob, gender, is_student, college_name, passout_year, branch, stars, level, profile_pic, created_at FROM users WHERE id = ?',
       [req.user.id]
     );
 
@@ -68,6 +68,21 @@ router.get('/doubts-solved', auth, async (req, res) => {
   } catch (err) {
     console.error('Get doubts solved error:', err);
     res.status(500).json({ error: 'Server error. Please try again.' });
+  }
+});
+
+// ── PUT /api/profile/avatar — Save selected avatar index ────────────────────
+router.put('/avatar', auth, async (req, res) => {
+  const { profile_pic } = req.body;
+  if (profile_pic === undefined || profile_pic === null) {
+    return res.status(400).json({ error: 'profile_pic is required.' });
+  }
+  try {
+    await pool.query('UPDATE users SET profile_pic = ? WHERE id = ?', [String(profile_pic), req.user.id]);
+    res.json({ success: true, profile_pic: String(profile_pic) });
+  } catch (err) {
+    console.error('Update avatar error:', err);
+    res.status(500).json({ error: 'Server error.' });
   }
 });
 

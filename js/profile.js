@@ -7,6 +7,27 @@ const LEVELS = [
     { name: 'Diamond', min: 1000, max: 9999 }
 ];
 
+// ── AVATAR SPRITE CONFIG ────────────────────────────────────
+// The sprite sheet is a 5-column × 6-row grid = 30 avatars
+const AVATAR_COLS = 5;
+const AVATAR_ROWS = 6;
+const AVATAR_TOTAL = AVATAR_COLS * AVATAR_ROWS; // 30
+
+// Returns background-size and background-position for a given index (0-based)
+function avatarSpriteStyle(index, displaySize) {
+    const col = index % AVATAR_COLS;
+    const row = Math.floor(index / AVATAR_COLS);
+    // background-size: make the full sheet fit such that each cell = displaySize
+    const bsW = AVATAR_COLS * displaySize;
+    const bsH = AVATAR_ROWS * displaySize;
+    const bpX = -(col * displaySize);
+    const bpY = -(row * displaySize);
+    return {
+        backgroundSize: `${bsW}px ${bsH}px`,
+        backgroundPosition: `${bpX}px ${bpY}px`
+    };
+}
+
 const LEVEL_COLORS = {
     Bronze: '#cd7f32',
     Silver: '#a8a9ad',
@@ -52,6 +73,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             renderLists();
         });
     });
+
+    // ── Avatar modal setup ──────────────────────────────────
+    buildAvatarGrid();
+    const avatarWrapper = document.getElementById('avatar-wrapper');
+    const avatarModal   = document.getElementById('avatar-modal');
+    const closeBtn      = document.getElementById('avatar-modal-close');
+
+    if (avatarWrapper && avatarModal) {
+        avatarWrapper.addEventListener('click', () => {
+            avatarModal.style.display = 'flex';
+            highlightSelected();
+        });
+        closeBtn.addEventListener('click', () => {
+            avatarModal.style.display = 'none';
+        });
+        avatarModal.addEventListener('click', (e) => {
+            if (e.target === avatarModal) avatarModal.style.display = 'none';
+        });
+    }
 });
 
 // ── Data ─────────────────────────────────────────────────
@@ -62,7 +102,21 @@ let activeFilter = { asked: 'all', solved: 'all' };
 // ── Hero section ─────────────────────────────────────────
 function populateHero(user) {
     const initials = user.first_name ? user.first_name[0].toUpperCase() : user.username[0].toUpperCase();
-    document.getElementById('profile-avatar').textContent = initials;
+    const avatarEl = document.getElementById('profile-avatar');
+
+    // Determine saved avatar: prefer DB value, fallback to sessionStorage
+    const savedPic = user.profile_pic !== undefined && user.profile_pic !== null
+        ? String(user.profile_pic)
+        : sessionStorage.getItem('pds_profile_pic');
+
+    if (savedPic !== null && savedPic !== '' && !isNaN(Number(savedPic))) {
+        applyAvatarToEl(avatarEl, Number(savedPic), 90);
+        // Sync sessionStorage with DB value
+        sessionStorage.setItem('pds_profile_pic', savedPic);
+    } else {
+        avatarEl.textContent = initials;
+    }
+
     document.getElementById('profile-fullname').textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
     document.getElementById('profile-username').textContent = `@${user.username}`;
     document.getElementById('profile-email').textContent = user.email;
@@ -166,6 +220,62 @@ function escHtml(str) {
     return String(str)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;')
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// ── Avatar helpers ────────────────────────────────────────
+function applyAvatarToEl(el, index, size) {
+    const { backgroundSize, backgroundPosition } = avatarSpriteStyle(index, size);
+    el.classList.add('is-sprite');
+    el.style.backgroundSize = backgroundSize;
+    el.style.backgroundPosition = backgroundPosition;
+    el.textContent = '';
+}
+
+function buildAvatarGrid() {
+    const grid = document.getElementById('avatar-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    for (let i = 0; i < AVATAR_TOTAL; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'avatar-cell';
+        cell.dataset.index = i;
+        const { backgroundSize, backgroundPosition } = avatarSpriteStyle(i, 72);
+        cell.style.backgroundSize = backgroundSize;
+        cell.style.backgroundPosition = backgroundPosition;
+        cell.addEventListener('click', () => selectAvatar(i));
+        grid.appendChild(cell);
+    }
+}
+
+function highlightSelected() {
+    const saved = sessionStorage.getItem('pds_profile_pic');
+    document.querySelectorAll('.avatar-cell').forEach(c => c.classList.remove('selected'));
+    if (saved !== null) {
+        const cell = document.querySelector(`.avatar-cell[data-index="${saved}"]`);
+        if (cell) cell.classList.add('selected');
+    }
+}
+
+async function selectAvatar(index) {
+    const token = sessionStorage.getItem('pds_token');
+    // Optimistic UI update
+    const avatarEl = document.getElementById('profile-avatar');
+    applyAvatarToEl(avatarEl, index, 90);
+    sessionStorage.setItem('pds_profile_pic', String(index));
+    highlightSelected();
+    // Close modal
+    document.getElementById('avatar-modal').style.display = 'none';
+
+    // Persist to DB
+    try {
+        await fetch('/api/profile/avatar', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ profile_pic: String(index) })
+        });
+    } catch (e) {
+        console.warn('Avatar save failed', e);
+    }
 }
 
 // ── Logout ─────────────────────────────────────────

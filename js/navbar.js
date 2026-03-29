@@ -11,6 +11,27 @@
 
   const POLL_MS = 25000;
 
+  // ── Avatar sprite helper ──────────────────────────────────
+  const AV_COLS = 5, AV_ROWS = 6;
+  function buildNavAvatar(uname) {
+    const pic = sessionStorage.getItem('pds_profile_pic');
+    if (pic !== null && pic !== '' && !isNaN(Number(pic))) {
+      const idx = Number(pic);
+      const col = idx % AV_COLS;
+      const row = Math.floor(idx / AV_COLS);
+      const sz = 34; // nav avatar size
+      const bsW = AV_COLS * sz, bsH = AV_ROWS * sz;
+      const bpX = -(col * sz), bpY = -(row * sz);
+      return `<span class="nav-avatar-sprite" style="background-image:url('../images/avatars.jpeg');background-size:${bsW}px ${bsH}px;background-position:${bpX}px ${bpY}px;"></span>`;
+    }
+    return `<span>${uname.charAt(0).toUpperCase()}</span>`;
+  }
+
+  function refreshNavAvatar() {
+    const el = document.getElementById('pds-nav-avatar');
+    if (el) el.innerHTML = buildNavAvatar(username);
+  }
+
   function injectNav() {
     const slot = document.getElementById('user-nav');
     if (!slot) return;
@@ -48,7 +69,7 @@
 
         <div class="nav-user-chip">
           <a href="../html/profile.html" class="nav-username-link" title="View Profile">
-            <span class="nav-avatar">${username.charAt(0).toUpperCase()}</span>
+            <span class="nav-avatar" id="pds-nav-avatar">${buildNavAvatar(username)}</span>
             <span class="nav-username">${username}</span>
           </a>
           <span class="nav-stars">⭐ ${stars}</span>
@@ -195,7 +216,16 @@
           display: flex;
           align-items: center;
           justify-content: center;
+          overflow: hidden;
           transition: transform 0.2s;
+        }
+        .nav-avatar-sprite {
+          display: block;
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          background-repeat: no-repeat;
+          flex-shrink: 0;
         }
         .nav-username-link:hover .nav-avatar { transform: scale(1.1); }
         .nav-username {
@@ -220,6 +250,11 @@
     `;
 
     setupNotifications();
+
+    // Refresh nav avatar whenever sessionStorage changes (e.g. after selecting on profile page)
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'pds_profile_pic') refreshNavAvatar();
+    });
   }
 
   function authHeaders() {

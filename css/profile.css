@@ -381,3 +381,135 @@ body {
     transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
 }
+
+/* ── AVATAR WRAPPER & EDIT ICON ──────────────────────────── */
+.avatar-wrapper {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.avatar-wrapper .avatar-large {
+    width: 100%;
+    height: 100%;
+}
+
+.avatar-edit-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 26px;
+    height: 26px;
+    background: #fff;
+    border: 2px solid #f97316;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+}
+
+.avatar-wrapper:hover .avatar-edit-icon {
+    transform: scale(1.15);
+}
+
+/* Avatar as sprite image */
+.avatar-large.is-sprite {
+    background-image: url('../images/avatars.jpeg');
+    background-color: transparent;
+    background-repeat: no-repeat;
+    /* background-size and background-position set via JS */
+    font-size: 0;
+    color: transparent;
+}
+
+/* ── AVATAR PICKER MODAL ─────────────────────────────────── */
+.avatar-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeInOverlay 0.2s ease;
+}
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.avatar-modal-box {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    padding: 24px;
+    width: min(520px, 95vw);
+    animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.avatar-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.avatar-modal-close {
+    border: none;
+    background: #f3f4f6;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+.avatar-modal-close:hover { background: #e5e7eb; }
+
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.avatar-cell {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    overflow: hidden;
+    background-image: url('../images/avatars.jpeg');
+    background-repeat: no-repeat;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+}
+
+.avatar-cell:hover {
+    border-color: #f97316;
+    transform: scale(1.08);
+    box-shadow: 0 4px 16px rgba(249, 115, 22, 0.35);
+}
+
+.avatar-cell.selected {
+    border-color: #f97316;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.3);
+}
