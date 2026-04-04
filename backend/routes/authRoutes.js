@@ -34,6 +34,10 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Username must be ≥6 chars with at least one letter and number.' });
     }
 
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+      return res.status(400).json({ error: 'Please enter a valid email address with a proper domain.' });
+    }
+
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(password)) {
       return res.status(400).json({ error: 'Password must have 8+ chars, uppercase, lowercase, number & special char.' });
     }

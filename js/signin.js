@@ -16,7 +16,7 @@ function allowUsernameChars(event) {
   const allowed = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight'];
   if (allowed.includes(event.key) || event.ctrlKey || event.metaKey) return true;
   if (event.key === ' ') { event.preventDefault(); return false; }
-  if (!/^[a-z0-9_]$/.test(event.key)) { event.preventDefault(); return false; }
+  if (!/^[A-Za-z0-9_]$/.test(event.key)) { event.preventDefault(); return false; }
   return true;
 }
 
@@ -50,7 +50,7 @@ function preventYearPaste(event) {
 function preventInvalidUsernamePaste(event) {
   event.preventDefault();
   const paste = (event.clipboardData || window.clipboardData).getData('text');
-  event.target.value += paste.replace(/[^a-z0-9_]/g, '');
+  event.target.value += paste.replace(/[^A-Za-z0-9_]/g, '');
 }
 
 function allowCollegeName(event) {
@@ -271,14 +271,126 @@ studentRadios.forEach(radio => {
 function showError(id, msg) {
   const el = document.getElementById(id);
   if (el) { el.innerText = msg; el.style.display = 'block'; }
+  const inputId = id.replace('error-', '');
+  const inputEl = document.getElementById(inputId);
+  if (inputEl) {
+    inputEl.classList.add('is-invalid');
+    inputEl.classList.remove('is-valid');
+  }
+}
+
+function clearError(id) {
+  const el = document.getElementById(id);
+  if (el) { el.innerText = ''; el.style.display = 'none'; }
+  const inputId = id.replace('error-', '');
+  const inputEl = document.getElementById(inputId);
+  if (inputEl) {
+    inputEl.classList.remove('is-invalid');
+    if (inputEl.value.trim() !== '') {
+      inputEl.classList.add('is-valid');
+    } else {
+      inputEl.classList.remove('is-valid');
+    }
+  }
 }
 
 function clearErrors() {
   ['error-username', 'error-email', 'error-password', 'error-confirm', 'error-dob']
-    .forEach(id => {
-      const el = document.getElementById(id);
-      if (el) { el.innerText = ''; el.style.display = 'none'; }
+    .forEach(id => clearError(id));
+}
+
+// ── Real-time Validation ────────────────────────────────────────────────────
+['firstName', 'lastName'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('input', function() {
+      if (this.checkValidity() && this.value.trim() !== '') {
+        this.classList.remove('is-invalid');
+        this.classList.add('is-valid');
+      } else {
+        this.classList.add('is-invalid');
+        this.classList.remove('is-valid');
+      }
     });
+  }
+});
+
+const usernameEl = document.getElementById('username');
+if (usernameEl) {
+  usernameEl.addEventListener('input', function() {
+    const v = this.value.trim();
+    if (!v) { clearError('error-username'); return; }
+    if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9_]{6,}$/.test(v)) {
+      showError('error-username', 'Username must be ≥6 chars with at least one letter and number.');
+    } else {
+      clearError('error-username');
+    }
+  });
+}
+
+const emailEl = document.getElementById('email');
+if (emailEl) {
+  emailEl.addEventListener('input', function() {
+    const v = this.value.trim();
+    if (!v) { clearError('error-email'); return; }
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(v)) {
+      showError('error-email', 'Please enter a valid email address with a proper domain (e.g., @gmail.com).');
+    } else {
+      clearError('error-email');
+    }
+  });
+}
+
+const passEl = document.getElementById('password');
+if (passEl) {
+  passEl.addEventListener('input', function() {
+    const v = this.value;
+    if (!v) { clearError('error-password'); return; }
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(v)) {
+      showError('error-password', 'Password must have 8+ chars, uppercase, lowercase, number & special char.');
+    } else {
+      clearError('error-password');
+    }
+    
+    const confirmV = document.getElementById('confirmPassword')?.value;
+    if (confirmV && v !== confirmV) {
+      showError('error-confirm', 'Passwords do not match!');
+    } else if (confirmV) {
+      clearError('error-confirm');
+    }
+  });
+}
+
+const confirmPassEl = document.getElementById('confirmPassword');
+if (confirmPassEl) {
+  confirmPassEl.addEventListener('input', function() {
+    const v = this.value;
+    if (!v) { clearError('error-confirm'); return; }
+    const passV = document.getElementById('password')?.value;
+    if (v !== passV) {
+      showError('error-confirm', 'Passwords do not match!');
+    } else {
+      clearError('error-confirm');
+    }
+  });
+}
+
+const dobEl = document.getElementById('dob');
+if (dobEl) {
+  dobEl.addEventListener('change', function() {
+    const v = this.value;
+    if (!v) { clearError('error-dob'); return; }
+    const today = new Date(), birth = new Date(v);
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    if (age < 15) { 
+      showError('error-dob', 'You must be at least 15 years old.');
+    } else {
+      clearError('error-dob');
+    }
+  });
 }
 
 function setFormStatus(msg, isError = false) {
@@ -371,8 +483,14 @@ document.getElementById('signupForm').addEventListener('submit', async function 
   // ── Client-side validation ──────────────────────────────────────────────
   let isValid = true;
 
-  if (!/^(?=.*[a-z])(?=.*\d)[a-z0-9_]{6,}$/.test(username)) {
+  if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9_]{6,}$/.test(username)) {
     showError('error-username', 'Username must be ≥6 chars with at least one letter and number.');
+    isValid = false;
+  }
+  
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    showError('error-email', 'Please enter a valid email address with a proper domain (e.g., @gmail.com).');
     isValid = false;
   }
   if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(pass)) {
