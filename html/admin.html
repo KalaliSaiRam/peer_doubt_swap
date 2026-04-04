@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Peer Doubt Swap</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="admin-container">
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fas fa-user-shield"></i>
+        <span>Admin Panel</span>
+      </div>
+      <nav>
+        <ul>
+          <li class="active" data-tab="overview"><i class="fas fa-chart-line"></i> Overview</li>
+          <li data-tab="users"><i class="fas fa-users"></i> User Management</li>
+          <li data-tab="doubts"><i class="fas fa-question-circle"></i> Doubt Moderation</li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="backToApp"><i class="fas fa-arrow-left"></i> Back to Platform</button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header>
+        <h1>Welcome, Admin</h1>
+        <div class="admin-profile">
+          <span id="adminName">Loading...</span>
+        </div>
+      </header>
+
+      <section id="overview" class="tab-content active">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <div class="stat-info">
+              <h3>Total Users</h3>
+              <p id="totalUsers">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-question-circle"></i>
+            <div class="stat-info">
+              <h3>Total Doubts</h3>
+              <p id="totalDoubts">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-comments"></i>
+            <div class="stat-info">
+              <h3>Total Solutions</h3>
+              <p id="totalComments">0</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="users" class="tab-content">
+        <div class="table-container">
+          <div class="table-header">
+            <h2>User Management</h2>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Stars</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody">
+              <!-- Users will be injected here -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="doubts" class="tab-content">
+        <div class="table-container">
+          <div class="table-header">
+            <h2>Doubt Moderation</h2>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Asker</th>
+                <th>Subject</th>
+                <th>Question Preview</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="doubtTableBody">
+              <!-- Doubts will be injected here -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../js/admin.js"></script>
+</body>
+</html>

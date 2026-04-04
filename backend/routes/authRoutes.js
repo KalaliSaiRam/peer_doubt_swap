@@ -11,7 +11,7 @@ require('dotenv').config();
 // ── Helper: generate JWT ────────────────────────────────────────────────────
 function generateToken(user) {
   return jwt.sign(
-    { id: user.id, username: user.username },
+    { id: user.id, username: user.username, role: user.role || 'user' },
     process.env.JWT_SECRET,
     { expiresIn: '7d' }
   );
@@ -61,14 +61,14 @@ router.post('/register', async (req, res) => {
       [first_name, last_name, username, email, password_hash, dob || null, gender || null, is_student ? 1 : 0, college_name || null, passout_year || null, branch || null]
     );
 
-    const token = generateToken({ id: result.insertId, username });
+    const token = generateToken({ id: result.insertId, username, role: 'user' });
 
     res.status(201).json({
       message: 'Registration successful!',
       token,
       user: { id: result.insertId, username, first_name, last_name, email,
               dob, gender, is_student, college_name, passout_year, branch,
-              stars: 0, level: 'Bronze' }
+              stars: 0, level: 'Bronze', role: 'user' }
     });
 
   } catch (err) {
@@ -137,6 +137,7 @@ router.post('/login', async (req, res) => {
         college_name: user.college_name,
         passout_year: user.passout_year,
         branch: user.branch,
+        role: user.role,
         stars: user.stars,
         level: user.level
       }

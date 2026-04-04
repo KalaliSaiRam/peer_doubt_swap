@@ -38,6 +38,7 @@
 
     const stars = sessionStorage.getItem('pds_stars') || '0';
     const level = sessionStorage.getItem('pds_level') || 'Bronze';
+    const role = sessionStorage.getItem('pds_role') || 'user';
 
     const levelColors = {
       Bronze: '#cd7f32',
@@ -66,6 +67,12 @@
             </div>
           </div>
         </div>
+
+        ${role === 'admin' ? `
+          <a href="../html/admin.html" class="pds-nav-admin-link" title="Admin Dashboard">
+            <i class="fas fa-user-shield"></i> Admin
+          </a>
+        ` : ''}
 
         <div class="nav-user-chip">
           <a href="../html/profile.html" class="nav-username-link" title="View Profile">
@@ -246,7 +253,27 @@
           font-weight: 700;
           letter-spacing: 0.5px;
         }
+        .pds-nav-admin-link {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 14px;
+          background: #ef4444;
+          color: #fff;
+          text-decoration: none;
+          font-weight: 700;
+          font-size: 0.85rem;
+          border-radius: 8px;
+          transition: all 0.2s;
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+        .pds-nav-admin-link:hover {
+          background: #dc2626;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+        }
       </style>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     `;
 
     setupNotifications();

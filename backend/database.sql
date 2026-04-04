@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS users (
   college_name  VARCHAR(200) DEFAULT NULL,
   passout_year  VARCHAR(4)   DEFAULT NULL,
   branch        VARCHAR(100) DEFAULT NULL,
+  role          VARCHAR(20)  DEFAULT 'user', -- 'user' or 'admin'
   stars         INT          DEFAULT 0,
   level         VARCHAR(20)  DEFAULT 'Bronze',
   notifications_last_read_at TIMESTAMP NULL DEFAULT NULL,

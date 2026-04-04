@@ -30,9 +30,14 @@ async function handleLogin() {
     }
     
     sessionStorage.setItem('pds_username', data.user.username);
+    sessionStorage.setItem('pds_role', data.user.role || 'user');
+    sessionStorage.setItem('pds_stars', data.user.stars || 0);
+    sessionStorage.setItem('pds_level', data.user.level || 'Bronze');
+    
+    // Also update localStorage for the admin dashboard's specific check
+    localStorage.setItem('user', JSON.stringify(data.user));
+    localStorage.setItem('token', data.token);
     sessionStorage.setItem('pds_token', data.token);
-    sessionStorage.setItem('pds_stars', data.user.stars);
-    sessionStorage.setItem('pds_level', data.user.level);
     sessionStorage.setItem('pds_first_name', data.user.first_name);
     sessionStorage.setItem('pds_last_name', data.user.last_name || '');
     sessionStorage.setItem('pds_email', data.user.email);

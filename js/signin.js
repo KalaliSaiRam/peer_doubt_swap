@@ -594,7 +594,10 @@ document.getElementById('signupForm').addEventListener('submit', async function 
     // ── Store session & redirect ──────────────────────────────────────────
     try {
       sessionStorage.setItem('pds_username', data.user.username);
+      sessionStorage.setItem('pds_role', data.user.role || 'user');
       sessionStorage.setItem('pds_token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
       sessionStorage.setItem('pds_stars', data.user.stars);
       sessionStorage.setItem('pds_level', data.user.level);
       sessionStorage.setItem('pds_first_name', data.user.first_name);

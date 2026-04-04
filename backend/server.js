@@ -29,6 +29,7 @@ const commentRoutes = require('./routes/commentRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const leaderboardRoutes = require('./routes/leaderboardRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/doubts', doubtRoutes);
@@ -36,6 +37,7 @@ app.use('/api/doubts', commentRoutes);       // comments are nested under /api/d
 app.use('/api/profile', profileRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ── Root redirect ────────────────────────────────────────────────────────────
 app.get('/', (req, res) => {
