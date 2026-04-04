@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS users (
   passout_year  VARCHAR(4)   DEFAULT NULL,
   branch        VARCHAR(100) DEFAULT NULL,
   role          VARCHAR(20)  DEFAULT 'user', -- 'user' or 'admin'
+  status        VARCHAR(20)  DEFAULT 'active', -- 'active', 'suspended', or 'banned'
   stars         INT          DEFAULT 0,
   level         VARCHAR(20)  DEFAULT 'Bronze',
   notifications_last_read_at TIMESTAMP NULL DEFAULT NULL,

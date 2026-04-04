@@ -34,7 +34,7 @@ router.get('/stats', async (req, res) => {
 router.get('/users', async (req, res) => {
   try {
     const [rows] = await pool.query(`
-      SELECT id, first_name, last_name, username, email, role, stars, level, created_at 
+      SELECT id, first_name, last_name, username, email, role, status, stars, level, created_at 
       FROM users 
       ORDER BY created_at DESC
     `);
@@ -58,6 +58,28 @@ router.delete('/users/:id', async (req, res) => {
   } catch (err) {
     console.error('Admin delete user error:', err);
     res.status(500).json({ error: 'Failed to delete user account.' });
+  }
+});
+
+// ── PUT /api/admin/users/:id/status ──────────────────────────────────────────
+router.put('/users/:id/status', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { status } = req.body;
+
+    if (!['active', 'suspended', 'banned'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status provided.' });
+    }
+
+    if (userId == req.user.id) {
+      return res.status(400).json({ error: 'You cannot change your own admin status.' });
+    }
+
+    await pool.query('UPDATE users SET status = ? WHERE id = ?', [status, userId]);
+    res.json({ message: `User status updated to ${status}.` });
+  } catch (err) {
+    console.error('Admin update status error:', err);
+    res.status(500).json({ error: 'Failed to update user status.' });
   }
 });
 

@@ -13,6 +13,21 @@ router.post('/:doubtId/comments', auth, async (req, res) => {
     const { content } = req.body;
     const userId = req.user.id;
 
+    // Check daily limit (max 20 solutions per 24h)
+    // Admin users are exempt from this limit.
+    if (req.user.role !== 'admin') {
+      const [countRows] = await pool.query(
+        'SELECT COUNT(*) as count FROM comments WHERE user_id = ? AND created_at > NOW() - INTERVAL 1 DAY',
+        [userId]
+      );
+
+      if (countRows[0].count >= 20) {
+        return res.status(429).json({ 
+          error: 'Daily limit reached! You can provide up to 20 solutions every 24 hours.' 
+        });
+      }
+    }
+
     if (!content || !content.trim()) {
       return res.status(400).json({ error: 'Comment cannot be empty.' });
     }

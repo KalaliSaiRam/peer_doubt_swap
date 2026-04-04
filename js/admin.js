@@ -75,12 +75,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${u.username}</td>
                     <td>${u.email}</td>
                     <td><span class="role-badge ${u.role}">${u.role}</span></td>
+                    <td><span class="status-badge ${u.status}">${u.status}</span></td>
                     <td>${u.stars}</td>
                     <td>${new Date(u.created_at).toLocaleDateString()}</td>
                     <td>
-                        <button class="btn-delete" onclick="deleteUser(${u.id})">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <div class="actions-cell">
+                            ${u.status === 'active' ? `
+                                <button class="btn-action btn-suspend" onclick="updateUserStatus(${u.id}, 'suspended')" title="Suspend User">
+                                    <i class="fas fa-pause"></i>
+                                </button>
+                                <button class="btn-action btn-ban" onclick="updateUserStatus(${u.id}, 'banned')" title="Ban User">
+                                    <i class="fas fa-user-slash"></i>
+                                </button>
+                            ` : `
+                                <button class="btn-action btn-activate" onclick="updateUserStatus(${u.id}, 'active')" title="Activate User">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            `}
+                            <button class="btn-action btn-delete" onclick="deleteUser(${u.id})" title="Delete User">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -133,6 +148,29 @@ document.addEventListener('DOMContentLoaded', () => {
             else fetchUsers();
         } catch (err) {
             console.error('Delete user error:', err);
+        }
+    };
+
+    window.updateUserStatus = async (id, status) => {
+        const action = status === 'active' ? 'activate' : status;
+        if (!confirm(`Are you sure you want to ${action} this user?`)) return;
+        try {
+            const res = await fetch(`/api/admin/users/${id}/status`, {
+                method: 'PUT',
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status })
+            });
+            const data = await res.json();
+            if (data.error) alert(data.error);
+            else {
+                fetchUsers();
+                fetchStats();
+            }
+        } catch (err) {
+            console.error('Update status error:', err);
         }
     };
 

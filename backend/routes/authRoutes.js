@@ -120,6 +120,14 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Incorrect password.' });
     }
 
+    // Check account status
+    if (user.status === 'suspended' || user.status === 'banned') {
+      const msg = user.status === 'suspended' 
+        ? 'Your account has been temporarily suspended by an administrator.' 
+        : 'Your account has been permanently banned from Peer Doubt Swap.';
+      return res.status(403).json({ error: msg });
+    }
+
     const token = generateToken(user);
 
     res.json({

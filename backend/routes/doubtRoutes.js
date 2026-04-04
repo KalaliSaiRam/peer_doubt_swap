@@ -12,6 +12,21 @@ router.post('/', auth, async (req, res) => {
     const { subject, difficulty, question } = req.body;
     const userId = req.user.id;
 
+    // Check daily limit (max 10 doubts per 24h)
+    // Admin users are exempt from this limit.
+    if (req.user.role !== 'admin') {
+      const [countRows] = await pool.query(
+        'SELECT COUNT(*) as count FROM doubts WHERE user_id = ? AND created_at > NOW() - INTERVAL 1 DAY',
+        [userId]
+      );
+
+      if (countRows[0].count >= 10) {
+        return res.status(429).json({ 
+          error: 'Daily limit reached! You can post up to 10 doubts every 24 hours.' 
+        });
+      }
+    }
+
     // Validation
     if (!subject || !difficulty || !question) {
       return res.status(400).json({ error: 'Subject, difficulty, and question are required.' });
