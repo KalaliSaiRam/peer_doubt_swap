@@ -241,3 +241,10 @@ body {
     border-left-color: #059669;
     background: #f0fdf4;
 }
+
+/* ── RESPONSIVENESS ─────────────────────────── */
+@media (max-width: 900px) {
+    .header { padding: 0 16px; }
+    .header-left span { font-size: 1rem; }
+    .main-content, .posted-doubts-section { width: 95%; padding: 20px 16px; margin: 16px auto; }
+}

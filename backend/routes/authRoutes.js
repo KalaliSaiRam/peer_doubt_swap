@@ -30,8 +30,8 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'All required fields must be filled.' });
     }
 
-    if (!/^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z0-9_]{6,}$/.test(username)) {
-      return res.status(400).json({ error: 'Username must be ≥6 chars with at least one letter and number.' });
+    if (!/^(?=.*[a-z])(?=.*\d)[a-z0-9_]{6,}$/.test(username)) {
+      return res.status(400).json({ error: 'Username must be ≥6 chars with at least one lowercase letter and number, and only contain lowercase letters, numbers or underscores.' });
     }
 
     if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {

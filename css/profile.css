@@ -512,4 +512,18 @@ body {
 .avatar-cell.selected {
     border-color: #f97316;
     box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.3);
+}
+
+/* ── RESPONSIVENESS ─────────────────────────── */
+@media (max-width: 900px) {
+    .header { padding: 0 16px; }
+    .header-left span { font-size: 1rem; }
+    .profile-main { padding: 16px 12px 40px; gap: 20px; }
+    .profile-hero { flex-direction: column; text-align: center; padding: 20px; }
+    .avatar-large { margin: 0 auto; width: 70px; height: 70px; font-size: 2rem; }
+    .hero-badges { justify-content: center; }
+    .level-labels { flex-direction: column; align-items: center; gap: 4px; }
+    .doubts-section { grid-template-columns: 1fr; }
+    .details-card, .doubts-col { padding: 16px; }
+    .details-grid { grid-template-columns: 1fr; }
 }

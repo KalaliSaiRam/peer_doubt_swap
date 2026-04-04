@@ -169,3 +169,25 @@ h3.text-center {
 .password-toggle:hover {
   color: #1a56db;
 }
+
+/* ── RESPONSIVENESS ─────────────────────────── */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0 16px;
+  }
+  .app-title {
+    font-size: 1.1rem;
+  }
+  .form-card {
+    padding: 24px 16px;
+    border-radius: 12px;
+  }
+  h3.text-center {
+    font-size: 1.25rem;
+    margin-bottom: 20px !important;
+  }
+  .btn-primary {
+    padding: 10px 30px !important;
+    width: 100%;
+  }
+}

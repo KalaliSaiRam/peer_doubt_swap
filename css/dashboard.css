@@ -189,3 +189,11 @@ body {
 .leaderboard:hover {
   box-shadow: 0 20px 52px rgba(124, 58, 237, 0.55);
 }
+
+/* ── RESPONSIVENESS ─────────────────────────── */
+@media (max-width: 900px) {
+    .header { padding: 0 16px; }
+    .header-left span { font-size: 1rem; }
+    .dashboard-actions { padding: 24px 16px; gap: 20px; flex-direction: column; }
+    .action-btn { width: 100%; height: auto; max-width: 350px; min-height: 250px; }
+}

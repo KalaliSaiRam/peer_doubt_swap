@@ -320,8 +320,16 @@ if (usernameEl) {
   usernameEl.addEventListener('input', function() {
     const v = this.value.trim();
     if (!v) { clearError('error-username'); return; }
-    if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9_]{6,}$/.test(v)) {
-      showError('error-username', 'Username must be ≥6 chars with at least one letter and number.');
+    if (v.length < 6) {
+      showError('error-username', 'Username must be at least 6 characters long.');
+    } else if (/[A-Z]/.test(v)) {
+      showError('error-username', 'Username cannot contain uppercase letters.');
+    } else if (!/[a-z]/.test(v)) {
+      showError('error-username', 'Username must contain at least one letter.');
+    } else if (!/\d/.test(v)) {
+      showError('error-username', 'Username must contain at least one number.');
+    } else if (/[^a-zA-Z0-9_]/.test(v)) {
+      showError('error-username', 'Username can only contain letters, numbers, and underscores.');
     } else {
       clearError('error-username');
     }
@@ -333,11 +341,17 @@ if (emailEl) {
   emailEl.addEventListener('input', function() {
     const v = this.value.trim();
     if (!v) { clearError('error-email'); return; }
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(v)) {
-      showError('error-email', 'Please enter a valid email address with a proper domain (e.g., @gmail.com).');
+    if (!/@/.test(v)) {
+      showError('error-email', 'Email must contain an "@" symbol.');
+    } else if (!/@.*\./.test(v)) {
+      showError('error-email', 'Email must have a valid domain extension (e.g., .com, .in).');
     } else {
-      clearError('error-email');
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(v)) {
+        showError('error-email', 'Please enter a valid email address.');
+      } else {
+        clearError('error-email');
+      }
     }
   });
 }
@@ -347,8 +361,16 @@ if (passEl) {
   passEl.addEventListener('input', function() {
     const v = this.value;
     if (!v) { clearError('error-password'); return; }
-    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(v)) {
-      showError('error-password', 'Password must have 8+ chars, uppercase, lowercase, number & special char.');
+    if (v.length < 8) {
+      showError('error-password', 'Password must be at least 8 characters long.');
+    } else if (!/[a-z]/.test(v)) {
+      showError('error-password', 'Password must contain at least one lowercase letter.');
+    } else if (!/[A-Z]/.test(v)) {
+      showError('error-password', 'Password must contain at least one uppercase letter.');
+    } else if (!/\d/.test(v)) {
+      showError('error-password', 'Password must contain at least one number.');
+    } else if (!/\W|_/.test(v)) {
+      showError('error-password', 'Password must contain at least one special character.');
     } else {
       clearError('error-password');
     }
@@ -483,18 +505,51 @@ document.getElementById('signupForm').addEventListener('submit', async function 
   // ── Client-side validation ──────────────────────────────────────────────
   let isValid = true;
 
-  if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9_]{6,}$/.test(username)) {
-    showError('error-username', 'Username must be ≥6 chars with at least one letter and number.');
+  if (username.length < 6) {
+    showError('error-username', 'Username must be at least 6 characters long.');
+    isValid = false;
+  } else if (/[A-Z]/.test(username)) {
+    showError('error-username', 'Username cannot contain uppercase letters.');
+    isValid = false;
+  } else if (!/[a-z]/.test(username)) {
+    showError('error-username', 'Username must contain at least one letter.');
+    isValid = false;
+  } else if (!/\d/.test(username)) {
+    showError('error-username', 'Username must contain at least one number.');
+    isValid = false;
+  } else if (/[^a-zA-Z0-9_]/.test(username)) {
+    showError('error-username', 'Username can only contain letters, numbers, and underscores.');
     isValid = false;
   }
   
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!emailRegex.test(email)) {
-    showError('error-email', 'Please enter a valid email address with a proper domain (e.g., @gmail.com).');
+  if (!/@/.test(email)) {
+    showError('error-email', 'Email must contain an "@" symbol.');
     isValid = false;
+  } else if (!/@.*\./.test(email)) {
+    showError('error-email', 'Email must have a valid domain extension (e.g., .com, .in).');
+    isValid = false;
+  } else {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      showError('error-email', 'Please enter a valid email address.');
+      isValid = false;
+    }
   }
-  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(pass)) {
-    showError('error-password', 'Password must have 8+ chars, uppercase, lowercase, number & special char.');
+
+  if (pass.length < 8) {
+    showError('error-password', 'Password must be at least 8 characters long.');
+    isValid = false;
+  } else if (!/[a-z]/.test(pass)) {
+    showError('error-password', 'Password must contain at least one lowercase letter.');
+    isValid = false;
+  } else if (!/[A-Z]/.test(pass)) {
+    showError('error-password', 'Password must contain at least one uppercase letter.');
+    isValid = false;
+  } else if (!/\d/.test(pass)) {
+    showError('error-password', 'Password must contain at least one number.');
+    isValid = false;
+  } else if (!/\W|_/.test(pass)) {
+    showError('error-password', 'Password must contain at least one special character.');
     isValid = false;
   }
   if (pass !== confirm) {

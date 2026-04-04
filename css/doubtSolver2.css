@@ -454,3 +454,14 @@ body {
     line-height: 1.5;
     overflow-y: auto;
 }
+
+/* ── RESPONSIVENESS ─────────────────────────── */
+@media (max-width: 900px) {
+    .header { padding: 0 16px; }
+    .header-left span { font-size: 1rem; }
+    .split-container { flex-direction: column; height: auto; overflow: visible; padding: 16px; }
+    .left-panel { flex: none; width: 100%; overflow: visible; padding: 16px; }
+    .right-panel { flex: none; width: 100%; overflow: visible; padding: 16px; }
+    .subject-banner, .question-section, .comment-section { width: 100%; max-width: 100%; box-sizing: border-box; }
+    .compiler-section { min-height: 500px; padding: 16px; }
+}

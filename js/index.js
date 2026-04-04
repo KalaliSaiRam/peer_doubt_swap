@@ -46,11 +46,27 @@ async function handleLogin() {
     feedback.style.color = 'green';
     feedback.innerText = 'Login successful! Redirecting...';
     setTimeout(() => window.location.href = 'dashboard.html', 500);
-  } catch(e) {
-    feedback.style.color = 'red';
-    feedback.innerText = 'Error connecting to server. Please try again.';
-  }
+    } catch(e) {
+      feedback.style.color = 'red';
+      feedback.innerText = 'Error connecting to server. Please try again.';
+    }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const usernameEl = document.getElementById('username');
+    const uFeedback = document.getElementById('username-feedback');
+    if (usernameEl && uFeedback) {
+        usernameEl.addEventListener('input', function() {
+            const v = this.value.trim();
+            if (/[A-Z]/.test(v)) {
+                uFeedback.style.color = 'red';
+                uFeedback.innerText = 'Username cannot contain uppercase letters.';
+            } else {
+                uFeedback.innerText = '';
+            }
+        });
+    }
+});
 
 function SignIn() {
   window.location.href = 'signin.html';
